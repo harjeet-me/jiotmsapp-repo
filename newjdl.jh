@@ -1,0 +1,288 @@
+
+entity Booking {
+     name String,
+     loadNuber String,
+     shipmentNumber String,
+     bol String,
+     status  StatusEnum
+	}
+
+
+entity Invoice {
+     bookingNo String,
+     invoiceTotal Double,
+     invoiceDueDate Instant ,
+     status  StatusEnum
+	
+}
+
+entity InvoiceItem {
+     name String,
+     status String,
+     shipmentNumber String,
+     bol String,
+     status  StatusEnum
+	
+}
+
+
+
+entity Insurance{
+providerNumber String,
+provider String,
+description String,
+startDate LocalDate,
+expiryDate LocalDate
+}
+
+
+entity Contact{
+    designation DesignationEnum,
+    firstName String,
+	lastName String,
+	email String,
+	phoneNumber Long
+}
+
+
+entity BookingItem {
+    description String ,
+  	pickup Instant,
+	drop Instant,
+    source String,
+	destination String,
+    currentLocation String,
+    status  StatusEnum,
+    detention Long,
+    chasisInTime Instant,    
+    pod ImageBlob,
+    hazmat Boolean,
+    recievedBy String
+    
+}
+entity Equipment {
+    number String,
+  	type EquipmentEnum,
+	size SizeEnum,
+    insurance String
+    
+}
+
+entity Customer {
+	
+    company String,
+	firstName String,
+	lastName String,
+	email String,
+    dot Long,
+    mc Long,
+	phoneNumber Long,    
+    address String,
+    streetAddress String,
+    city String,
+	stateProvince String,
+    country CountryEnum,
+	postalCode String
+   
+    
+	
+}
+
+entity Vendor {
+	
+    company String,
+	firstName String,
+	lastName String,
+    dot Long,
+    mc Long,
+	email String,
+	phoneNumber Long
+    insuranceProvider String
+    
+	
+}
+
+entity Container {
+	company String,
+	firstName String,
+	lastName String,
+	email String,
+	phoneNumber Long
+    insuranceProvider String
+    
+	
+}
+
+entity Driver {
+    company String,
+	firstName String,
+	lastName String,
+	email String,
+	phoneNumber Long,
+	licenceNumber Long,
+    dob LocalDate
+    
+}
+
+
+enum CountryEnum {
+    USA, CANADA, MEXICO
+}
+enum EquipmentEnum {
+    TRAILER, CONTAINER, CHASIS
+}
+enum SizeEnum {
+    FIFTYTHREE, FORTYTHREE 
+}
+
+enum StatusEnum {
+    PICKEDUP, ONROAD , DELIVERED
+}
+
+enum DesignationEnum {
+    MANAGER, ACCOUNTANT , OWNER , DISPATCHER
+}
+
+
+
+/** not an ignored comment */
+entity Location {
+	address String,
+    streetAddress String,
+    city String,
+	stateProvince String,
+    country CountryEnum,
+	postalCode String
+	
+}
+
+relationship OneToOne {
+   
+	Customer{billingAddress (city) required } to Location{customer (company)  } 
+    Customer{contact (designation)  } to Contact  {customer (company)  } 
+     Customer{insurance (providerNumber)  } to Insurance  {customer (company)  } 
+    
+  
+}
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Customer{booking(name)} to Booking {customer(email)}
+    Booking {bookingItem} to   BookingItem {mainBooking(name)} 
+    
+}
+
+
+relationship ManyToOne {
+
+   
+    BookingItem {equipment(number)}   to Equipment,
+    BookingItem {driver(firstName)}   to  Driver{bookingItem(description)}
+	
+}
+relationship ManyToOne {
+  Invoice{invoiceTo} to Customer
+}
+
+
+
+entity Region {
+	regionName String
+}
+
+entity Country {
+	countryName String
+}
+
+entity Department {
+	departmentName String required
+}
+
+/**
+ * Task entity.
+ * @author The JHipster team.
+ */
+entity Task {
+	title String,
+	description String
+}
+
+/**
+ * The Employee entity.
+ */
+entity Employee {
+	/**
+	* The firstname attribute.
+	*/
+	firstName String,
+	lastName String,
+	email String,
+	phoneNumber String,
+	hireDate Instant,
+	salary Long,
+	commissionPct Long
+}
+
+entity Job {
+	jobTitle String,
+	minSalary Long,
+	maxSalary Long
+}
+
+entity JobHistory {
+	startDate Instant,
+	endDate Instant,
+	language Language
+}
+
+enum Language {
+    FRENCH, ENGLISH, SPANISH
+}
+
+relationship OneToOne {
+	Country{region} to Region
+}
+
+relationship OneToOne {
+	Department{location} to Location
+}
+
+relationship ManyToMany {
+	Job{task(title)} to Task{job}
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Employee{job} to Job,
+	/**
+	* A relationship
+	*/
+	Department{employee} to
+	/**
+	* Another side of the same relationship
+	*/
+	Employee
+}
+
+relationship ManyToOne {
+	Employee{manager} to Employee
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	JobHistory{job} to Job,
+	JobHistory{department} to Department,
+	JobHistory{employee} to Employee
+}
+
+// Set pagination options
+paginate JobHistory, Employee with infinite-scroll
+paginate Job , Booking with pagination
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
