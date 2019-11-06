@@ -1,0 +1,39 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="equipment">
+            <h2><span jhiTranslate="jiotmsappApp.equipment.detail.title">Equipment</span> {{equipment.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jiotmsappApp.equipment.number">Number</span></dt>
+                <dd>
+                    <span>{{equipment.number}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.equipment.type">Type</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'jiotmsappApp.EquipmentEnum.' + equipment.type}}">{{equipment.type}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.equipment.size">Size</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'jiotmsappApp.SizeEnum.' + equipment.size}}">{{equipment.size}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.equipment.insurance">Insurance</span></dt>
+                <dd>
+                    <span>{{equipment.insurance}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/equipment', equipment.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

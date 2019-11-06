@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="vendor">
+            <h2><span jhiTranslate="jiotmsappApp.vendor.detail.title">Vendor</span> {{vendor.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jiotmsappApp.vendor.company">Company</span></dt>
+                <dd>
+                    <span>{{vendor.company}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.vendor.firstName">First Name</span></dt>
+                <dd>
+                    <span>{{vendor.firstName}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.vendor.lastName">Last Name</span></dt>
+                <dd>
+                    <span>{{vendor.lastName}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.vendor.dot">Dot</span></dt>
+                <dd>
+                    <span>{{vendor.dot}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.vendor.mc">Mc</span></dt>
+                <dd>
+                    <span>{{vendor.mc}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.vendor.email">Email</span></dt>
+                <dd>
+                    <span>{{vendor.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.vendor.phoneNumber">Phone Number</span></dt>
+                <dd>
+                    <span>{{vendor.phoneNumber}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.vendor.insuranceProvider">Insurance Provider</span></dt>
+                <dd>
+                    <span>{{vendor.insuranceProvider}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/vendor', vendor.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

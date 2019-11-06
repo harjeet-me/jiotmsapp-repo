@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="insurance">
+            <h2><span jhiTranslate="jiotmsappApp.insurance.detail.title">Insurance</span> {{insurance.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jiotmsappApp.insurance.providerNumber">Provider Number</span></dt>
+                <dd>
+                    <span>{{insurance.providerNumber}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.insurance.provider">Provider</span></dt>
+                <dd>
+                    <span>{{insurance.provider}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.insurance.description">Description</span></dt>
+                <dd>
+                    <span>{{insurance.description}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.insurance.startDate">Start Date</span></dt>
+                <dd>
+                    <span>{{insurance.startDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.insurance.expiryDate">Expiry Date</span></dt>
+                <dd>
+                    <span>{{insurance.expiryDate}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/insurance', insurance.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

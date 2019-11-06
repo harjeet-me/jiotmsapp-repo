@@ -1,0 +1,33 @@
+{
+    "name": "InvoiceItem",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "StatusEnum",
+            "fieldValues": "PICKEDUP,ONROAD,DELIVERED"
+        },
+        {
+            "fieldName": "shipmentNumber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "bol",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20191106081948",
+    "entityTableName": "invoice_item",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

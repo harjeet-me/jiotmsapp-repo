@@ -1,0 +1,94 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="bookingItem">
+            <h2><span jhiTranslate="jiotmsappApp.bookingItem.detail.title">Booking Item</span> {{bookingItem.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.description">Description</span></dt>
+                <dd>
+                    <span>{{bookingItem.description}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.pickup">Pickup</span></dt>
+                <dd>
+                    <span>{{bookingItem.pickup}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.drop">Drop</span></dt>
+                <dd>
+                    <span>{{bookingItem.drop}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.source">Source</span></dt>
+                <dd>
+                    <span>{{bookingItem.source}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.destination">Destination</span></dt>
+                <dd>
+                    <span>{{bookingItem.destination}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.currentLocation">Current Location</span></dt>
+                <dd>
+                    <span>{{bookingItem.currentLocation}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.status">Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'jiotmsappApp.StatusEnum.' + bookingItem.status}}">{{bookingItem.status}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.detention">Detention</span></dt>
+                <dd>
+                    <span>{{bookingItem.detention}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.chasisInTime">Chasis In Time</span></dt>
+                <dd>
+                    <span>{{bookingItem.chasisInTime}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.pod">Pod</span></dt>
+                <dd>
+                    <div *ngIf="bookingItem.pod">
+                        <a (click)="openFile(bookingItem.podContentType, bookingItem.pod)">
+                            <img [src]="'data:' + bookingItem.podContentType + ';base64,' + bookingItem.pod" style="max-width: 100%;" alt="bookingItem image"/>
+                        </a>
+                        {{bookingItem.podContentType}}, {{byteSize(bookingItem.pod)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.hazmat">Hazmat</span></dt>
+                <dd>
+                    <span>{{bookingItem.hazmat}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.recievedBy">Recieved By</span></dt>
+                <dd>
+                    <span>{{bookingItem.recievedBy}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.equipment">Equipment</span></dt>
+                <dd>
+                    <div *ngIf="bookingItem.equipment">
+                        <a [routerLink]="['/equipment', bookingItem.equipment?.id, 'view']">{{bookingItem.equipment?.number}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.driver">Driver</span></dt>
+                <dd>
+                    <div *ngIf="bookingItem.driver">
+                        <a [routerLink]="['/driver', bookingItem.driver?.id, 'view']">{{bookingItem.driver?.firstName}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.bookingItem.mainBooking">Main Booking</span></dt>
+                <dd>
+                    <div *ngIf="bookingItem.mainBooking">
+                        <a [routerLink]="['/booking', bookingItem.mainBooking?.id, 'view']">{{bookingItem.mainBooking?.name}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/booking-item', bookingItem.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

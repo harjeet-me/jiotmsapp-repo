@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="contact">
+            <h2><span jhiTranslate="jiotmsappApp.contact.detail.title">Contact</span> {{contact.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jiotmsappApp.contact.designation">Designation</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'jiotmsappApp.DesignationEnum.' + contact.designation}}">{{contact.designation}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.contact.firstName">First Name</span></dt>
+                <dd>
+                    <span>{{contact.firstName}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.contact.lastName">Last Name</span></dt>
+                <dd>
+                    <span>{{contact.lastName}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.contact.email">Email</span></dt>
+                <dd>
+                    <span>{{contact.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.contact.phoneNumber">Phone Number</span></dt>
+                <dd>
+                    <span>{{contact.phoneNumber}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/contact', contact.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

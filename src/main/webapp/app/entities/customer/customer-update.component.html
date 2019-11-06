@@ -1,0 +1,119 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-customer-heading" jhiTranslate="jiotmsappApp.customer.home.createOrEditLabel">Create or edit a Customer</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.company" for="field_company">Company</label>
+                    <input type="text" class="form-control" name="company" id="field_company"
+                           formControlName="company"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.firstName" for="field_firstName">First Name</label>
+                    <input type="text" class="form-control" name="firstName" id="field_firstName"
+                           formControlName="firstName"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.lastName" for="field_lastName">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" id="field_lastName"
+                           formControlName="lastName"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.email" for="field_email">Email</label>
+                    <input type="text" class="form-control" name="email" id="field_email"
+                           formControlName="email"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.dot" for="field_dot">Dot</label>
+                    <input type="number" class="form-control" name="dot" id="field_dot"
+                           formControlName="dot"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.mc" for="field_mc">Mc</label>
+                    <input type="number" class="form-control" name="mc" id="field_mc"
+                           formControlName="mc"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.phoneNumber" for="field_phoneNumber">Phone Number</label>
+                    <input type="number" class="form-control" name="phoneNumber" id="field_phoneNumber"
+                           formControlName="phoneNumber"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.address" for="field_address">Address</label>
+                    <input type="text" class="form-control" name="address" id="field_address"
+                           formControlName="address"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.streetAddress" for="field_streetAddress">Street Address</label>
+                    <input type="text" class="form-control" name="streetAddress" id="field_streetAddress"
+                           formControlName="streetAddress"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.city" for="field_city">City</label>
+                    <input type="text" class="form-control" name="city" id="field_city"
+                           formControlName="city"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.stateProvince" for="field_stateProvince">State Province</label>
+                    <input type="text" class="form-control" name="stateProvince" id="field_stateProvince"
+                           formControlName="stateProvince"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.country" for="field_country">Country</label>
+                    <select class="form-control" name="country" formControlName="country" id="field_country">
+                        <option value="USA">{{'jiotmsappApp.CountryEnum.USA' | translate}}</option>
+                        <option value="CANADA">{{'jiotmsappApp.CountryEnum.CANADA' | translate}}</option>
+                        <option value="MEXICO">{{'jiotmsappApp.CountryEnum.MEXICO' | translate}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.postalCode" for="field_postalCode">Postal Code</label>
+                    <input type="text" class="form-control" name="postalCode" id="field_postalCode"
+                           formControlName="postalCode"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.billingAddress" for="field_billingAddress">Billing Address</label>
+                    <select class="form-control" id="field_billingAddress" name="billingAddress" formControlName="billingAddress">
+                        <option *ngIf="!editForm.get('billingAddress').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="locationOption.id === editForm.get('billingAddress').value?.id ? editForm.get('billingAddress').value : locationOption" *ngFor="let locationOption of billingaddresses; trackBy: trackLocationById">{{locationOption.city}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('billingAddress').invalid && (editForm.get('billingAddress').dirty || editForm.get('billingAddress').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('billingAddress').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.contact" for="field_contact">Contact</label>
+                    <select class="form-control" id="field_contact" name="contact" formControlName="contact">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="contactOption.id === editForm.get('contact').value?.id ? editForm.get('contact').value : contactOption" *ngFor="let contactOption of contacts; trackBy: trackContactById">{{contactOption.designation}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.customer.insurance" for="field_insurance">Insurance</label>
+                    <select class="form-control" id="field_insurance" name="insurance" formControlName="insurance">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="insuranceOption.id === editForm.get('insurance').value?.id ? editForm.get('insurance').value : insuranceOption" *ngFor="let insuranceOption of insurances; trackBy: trackInsuranceById">{{insuranceOption.providerNumber}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

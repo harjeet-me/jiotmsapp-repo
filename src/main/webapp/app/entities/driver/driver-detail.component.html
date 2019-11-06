@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="driver">
+            <h2><span jhiTranslate="jiotmsappApp.driver.detail.title">Driver</span> {{driver.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jiotmsappApp.driver.company">Company</span></dt>
+                <dd>
+                    <span>{{driver.company}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.driver.firstName">First Name</span></dt>
+                <dd>
+                    <span>{{driver.firstName}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.driver.lastName">Last Name</span></dt>
+                <dd>
+                    <span>{{driver.lastName}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.driver.email">Email</span></dt>
+                <dd>
+                    <span>{{driver.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.driver.phoneNumber">Phone Number</span></dt>
+                <dd>
+                    <span>{{driver.phoneNumber}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.driver.licenceNumber">Licence Number</span></dt>
+                <dd>
+                    <span>{{driver.licenceNumber}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.driver.dob">Dob</span></dt>
+                <dd>
+                    <span>{{driver.dob}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/driver', driver.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

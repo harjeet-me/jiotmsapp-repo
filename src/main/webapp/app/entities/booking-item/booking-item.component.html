@@ -1,0 +1,118 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="jiotmsappApp.bookingItem.home.title">Booking Items</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-booking-item" [routerLink]="['/booking-item/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span class="hidden-sm-down"  jhiTranslate="jiotmsappApp.bookingItem.home.createLabel">
+            Create a new Booking Item
+            </span>
+        </button>
+    </h2>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'jiotmsappApp.bookingItem.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon [icon]="'search'"></fa-icon>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="alert alert-warning" *ngIf="bookingItems?.length === 0">
+        <span jhiTranslate="jiotmsappApp.bookingItem.home.notFound">No bookingItems found</span>
+    </div>
+    <div class="table-responsive" *ngIf="bookingItems?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+            <tr>
+            <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.description">Description</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.pickup">Pickup</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.drop">Drop</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.source">Source</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.destination">Destination</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.currentLocation">Current Location</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.status">Status</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.detention">Detention</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.chasisInTime">Chasis In Time</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.pod">Pod</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.hazmat">Hazmat</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.recievedBy">Recieved By</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.equipment">Equipment</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.driver">Driver</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.mainBooking">Main Booking</span></th>
+            <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let bookingItem of bookingItems ;trackBy: trackId">
+                <td><a [routerLink]="['/booking-item', bookingItem.id, 'view' ]">{{bookingItem.id}}</a></td>
+                <td>{{bookingItem.description}}</td>
+                <td>{{bookingItem.pickup | date:'medium'}}</td>
+                <td>{{bookingItem.drop | date:'medium'}}</td>
+                <td>{{bookingItem.source}}</td>
+                <td>{{bookingItem.destination}}</td>
+                <td>{{bookingItem.currentLocation}}</td>
+                <td jhiTranslate="{{'jiotmsappApp.StatusEnum.' + bookingItem.status}}">{{bookingItem.status}}</td>
+                <td>{{bookingItem.detention}}</td>
+                <td>{{bookingItem.chasisInTime | date:'medium'}}</td>
+                <td>
+                    <a *ngIf="bookingItem.pod" (click)="openFile(bookingItem.podContentType, bookingItem.pod)">
+                        <img [src]="'data:' + bookingItem.podContentType + ';base64,' + bookingItem.pod" style="max-height: 30px;" alt="bookingItem image"/>
+                    </a>
+                    <span *ngIf="bookingItem.pod">{{bookingItem.podContentType}}, {{byteSize(bookingItem.pod)}}</span>
+                </td>
+                <td>{{bookingItem.hazmat}}</td>
+                <td>{{bookingItem.recievedBy}}</td>
+                <td>
+                    <div *ngIf="bookingItem.equipment">
+                        <a [routerLink]="['/equipment', bookingItem.equipment?.id, 'view' ]" >{{bookingItem.equipment?.number}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="bookingItem.driver">
+                        <a [routerLink]="['/driver', bookingItem.driver?.id, 'view' ]" >{{bookingItem.driver?.firstName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="bookingItem.mainBooking">
+                        <a [routerLink]="['/booking', bookingItem.mainBooking?.id, 'view' ]" >{{bookingItem.mainBooking?.name}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/booking-item', bookingItem.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/booking-item', bookingItem.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/booking-item', { outlets: { popup: bookingItem.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

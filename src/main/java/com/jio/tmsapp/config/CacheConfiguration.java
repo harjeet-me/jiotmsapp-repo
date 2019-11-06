@@ -42,6 +42,32 @@ public class CacheConfiguration {
             createCache(cm, com.jio.tmsapp.domain.User.class.getName());
             createCache(cm, com.jio.tmsapp.domain.Authority.class.getName());
             createCache(cm, com.jio.tmsapp.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.jio.tmsapp.domain.Booking.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Booking.class.getName() + ".bookingItems");
+            createCache(cm, com.jio.tmsapp.domain.Invoice.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.InvoiceItem.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Insurance.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Contact.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.BookingItem.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Equipment.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Customer.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Customer.class.getName() + ".bookings");
+            createCache(cm, com.jio.tmsapp.domain.Vendor.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Container.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Driver.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Driver.class.getName() + ".bookingItems");
+            createCache(cm, com.jio.tmsapp.domain.Location.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Region.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Country.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Department.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Department.class.getName() + ".employees");
+            createCache(cm, com.jio.tmsapp.domain.Task.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Task.class.getName() + ".jobs");
+            createCache(cm, com.jio.tmsapp.domain.Employee.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Employee.class.getName() + ".jobs");
+            createCache(cm, com.jio.tmsapp.domain.Job.class.getName());
+            createCache(cm, com.jio.tmsapp.domain.Job.class.getName() + ".tasks");
+            createCache(cm, com.jio.tmsapp.domain.JobHistory.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,0 +1,41 @@
+{
+    "name": "Invoice",
+    "fields": [
+        {
+            "fieldName": "bookingNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "invoiceTotal",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "invoiceDueDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "StatusEnum",
+            "fieldValues": "PICKEDUP,ONROAD,DELIVERED"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "customer",
+            "otherEntityRelationshipName": "invoice",
+            "relationshipName": "invoiceTo",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20191106081947",
+    "entityTableName": "invoice",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

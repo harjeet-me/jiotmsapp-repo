@@ -1,0 +1,123 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-booking-item-heading" jhiTranslate="jiotmsappApp.bookingItem.home.createOrEditLabel">Create or edit a Booking Item</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.description" for="field_description">Description</label>
+                    <input type="text" class="form-control" name="description" id="field_description"
+                           formControlName="description"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.pickup" for="field_pickup">Pickup</label>
+                    <div class="d-flex">
+                        <input id="field_pickup" type="datetime-local" class="form-control" name="pickup" formControlName="pickup" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.drop" for="field_drop">Drop</label>
+                    <div class="d-flex">
+                        <input id="field_drop" type="datetime-local" class="form-control" name="drop" formControlName="drop" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.source" for="field_source">Source</label>
+                    <input type="text" class="form-control" name="source" id="field_source"
+                           formControlName="source"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.destination" for="field_destination">Destination</label>
+                    <input type="text" class="form-control" name="destination" id="field_destination"
+                           formControlName="destination"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.currentLocation" for="field_currentLocation">Current Location</label>
+                    <input type="text" class="form-control" name="currentLocation" id="field_currentLocation"
+                           formControlName="currentLocation"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.status" for="field_status">Status</label>
+                    <select class="form-control" name="status" formControlName="status" id="field_status">
+                        <option value="PICKEDUP">{{'jiotmsappApp.StatusEnum.PICKEDUP' | translate}}</option>
+                        <option value="ONROAD">{{'jiotmsappApp.StatusEnum.ONROAD' | translate}}</option>
+                        <option value="DELIVERED">{{'jiotmsappApp.StatusEnum.DELIVERED' | translate}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.detention" for="field_detention">Detention</label>
+                    <input type="number" class="form-control" name="detention" id="field_detention"
+                           formControlName="detention"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.chasisInTime" for="field_chasisInTime">Chasis In Time</label>
+                    <div class="d-flex">
+                        <input id="field_chasisInTime" type="datetime-local" class="form-control" name="chasisInTime" formControlName="chasisInTime" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.pod" for="field_pod">Pod</label>
+                    <div>
+                        <img [src]="'data:' + editForm.get('podContentType').value + ';base64,' + editForm.get('pod').value" style="max-height: 100px;" *ngIf="editForm.get('pod').value" alt="bookingItem image"/>
+                        <div *ngIf="editForm.get('pod').value" class="form-text text-danger clearfix">
+                            <span class="pull-left">{{editForm.get('podContentType').value}}, {{byteSize(editForm.get('pod').value)}}</span>
+                            <button type="button" (click)="clearInputImage('pod', 'podContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_pod" (change)="setFileData($event, 'pod', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="pod" id="field_pod"
+                           formControlName="pod"/>
+                    <input type="hidden" class="form-control" name="podContentType" id="field_podContentType"
+                           formControlName="podContentType" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.hazmat" for="field_hazmat">Hazmat</label>
+                    <input type="checkbox" class="form-control" name="hazmat" id="field_hazmat"
+                           formControlName="hazmat"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.recievedBy" for="field_recievedBy">Recieved By</label>
+                    <input type="text" class="form-control" name="recievedBy" id="field_recievedBy"
+                           formControlName="recievedBy"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.equipment" for="field_equipment">Equipment</label>
+                    <select class="form-control" id="field_equipment" name="equipment" formControlName="equipment">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="equipmentOption.id === editForm.get('equipment').value?.id ? editForm.get('equipment').value : equipmentOption" *ngFor="let equipmentOption of equipment; trackBy: trackEquipmentById">{{equipmentOption.number}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.driver" for="field_driver">Driver</label>
+                    <select class="form-control" id="field_driver" name="driver" formControlName="driver">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="driverOption.id === editForm.get('driver').value?.id ? editForm.get('driver').value : driverOption" *ngFor="let driverOption of drivers; trackBy: trackDriverById">{{driverOption.firstName}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.mainBooking" for="field_mainBooking">Main Booking</label>
+                    <select class="form-control" id="field_mainBooking" name="mainBooking" formControlName="mainBooking">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="bookingOption.id === editForm.get('mainBooking').value?.id ? editForm.get('mainBooking').value : bookingOption" *ngFor="let bookingOption of bookings; trackBy: trackBookingById">{{bookingOption.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
