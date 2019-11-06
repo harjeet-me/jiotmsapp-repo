@@ -1,0 +1,11 @@
+{
+  "jiotmsappApp": {
+    "DesignationEnum": {
+      "null": "",
+      "MANAGER": "MANAGER",
+      "ACCOUNTANT": "ACCOUNTANT",
+      "OWNER": "OWNER",
+      "DISPATCHER": "DISPATCHER"
+    }
+  }
+}

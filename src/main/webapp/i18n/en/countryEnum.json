@@ -1,0 +1,10 @@
+{
+  "jiotmsappApp": {
+    "CountryEnum": {
+      "null": "",
+      "USA": "USA",
+      "CANADA": "CANADA",
+      "MEXICO": "MEXICO"
+    }
+  }
+}

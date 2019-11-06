@@ -1,0 +1,34 @@
+{
+    "name": "Equipment",
+    "fields": [
+        {
+            "fieldName": "number",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "EquipmentEnum",
+            "fieldValues": "TRAILER,CONTAINER,CHASIS"
+        },
+        {
+            "fieldName": "size",
+            "fieldType": "SizeEnum",
+            "fieldValues": "FIFTYTHREE,FORTYTHREE"
+        },
+        {
+            "fieldName": "insurance",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20191106081952",
+    "entityTableName": "equipment",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

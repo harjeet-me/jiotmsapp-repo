@@ -1,0 +1,45 @@
+{
+    "name": "Contact",
+    "fields": [
+        {
+            "fieldName": "designation",
+            "fieldType": "DesignationEnum",
+            "fieldValues": "MANAGER,ACCOUNTANT,OWNER,DISPATCHER"
+        },
+        {
+            "fieldName": "firstName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "phoneNumber",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "customer",
+            "otherEntityRelationshipName": "contact",
+            "relationshipName": "customer",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20191106081950",
+    "entityTableName": "contact",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

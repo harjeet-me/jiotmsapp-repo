@@ -1,0 +1,39 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="invoiceItem">
+            <h2><span jhiTranslate="jiotmsappApp.invoiceItem.detail.title">Invoice Item</span> {{invoiceItem.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jiotmsappApp.invoiceItem.name">Name</span></dt>
+                <dd>
+                    <span>{{invoiceItem.name}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.invoiceItem.status">Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'jiotmsappApp.StatusEnum.' + invoiceItem.status}}">{{invoiceItem.status}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.invoiceItem.shipmentNumber">Shipment Number</span></dt>
+                <dd>
+                    <span>{{invoiceItem.shipmentNumber}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.invoiceItem.bol">Bol</span></dt>
+                <dd>
+                    <span>{{invoiceItem.bol}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/invoice-item', invoiceItem.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

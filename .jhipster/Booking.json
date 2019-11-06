@@ -1,0 +1,51 @@
+{
+    "name": "Booking",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "loadNuber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "shipmentNumber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "bol",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "StatusEnum",
+            "fieldValues": "PICKEDUP,ONROAD,DELIVERED"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "bookingItem",
+            "otherEntityRelationshipName": "mainBooking",
+            "relationshipName": "bookingItem"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "customer",
+            "otherEntityRelationshipName": "booking",
+            "relationshipName": "customer",
+            "otherEntityField": "email"
+        }
+    ],
+    "changelogDate": "20191106081946",
+    "entityTableName": "booking",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

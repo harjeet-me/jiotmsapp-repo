@@ -1,0 +1,88 @@
+{
+    "name": "BookingItem",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pickup",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "drop",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "source",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "destination",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "currentLocation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "StatusEnum",
+            "fieldValues": "PICKEDUP,ONROAD,DELIVERED"
+        },
+        {
+            "fieldName": "detention",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "chasisInTime",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "pod",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "hazmat",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "recievedBy",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "equipment",
+            "otherEntityRelationshipName": "bookingItem",
+            "relationshipName": "equipment",
+            "otherEntityField": "number"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "driver",
+            "otherEntityRelationshipName": "bookingItem",
+            "relationshipName": "driver",
+            "otherEntityField": "firstName"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "booking",
+            "otherEntityRelationshipName": "bookingItem",
+            "relationshipName": "mainBooking",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20191106081951",
+    "entityTableName": "booking_item",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

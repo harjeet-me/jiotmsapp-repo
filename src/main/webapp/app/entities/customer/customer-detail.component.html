@@ -1,0 +1,93 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="customer">
+            <h2><span jhiTranslate="jiotmsappApp.customer.detail.title">Customer</span> {{customer.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="jiotmsappApp.customer.company">Company</span></dt>
+                <dd>
+                    <span>{{customer.company}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.firstName">First Name</span></dt>
+                <dd>
+                    <span>{{customer.firstName}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.lastName">Last Name</span></dt>
+                <dd>
+                    <span>{{customer.lastName}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.email">Email</span></dt>
+                <dd>
+                    <span>{{customer.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.dot">Dot</span></dt>
+                <dd>
+                    <span>{{customer.dot}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.mc">Mc</span></dt>
+                <dd>
+                    <span>{{customer.mc}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.phoneNumber">Phone Number</span></dt>
+                <dd>
+                    <span>{{customer.phoneNumber}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.address">Address</span></dt>
+                <dd>
+                    <span>{{customer.address}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.streetAddress">Street Address</span></dt>
+                <dd>
+                    <span>{{customer.streetAddress}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.city">City</span></dt>
+                <dd>
+                    <span>{{customer.city}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.stateProvince">State Province</span></dt>
+                <dd>
+                    <span>{{customer.stateProvince}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.country">Country</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'jiotmsappApp.CountryEnum.' + customer.country}}">{{customer.country}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.postalCode">Postal Code</span></dt>
+                <dd>
+                    <span>{{customer.postalCode}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.billingAddress">Billing Address</span></dt>
+                <dd>
+                    <div *ngIf="customer.billingAddress">
+                        <a [routerLink]="['/location', customer.billingAddress?.id, 'view']">{{customer.billingAddress?.city}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.contact">Contact</span></dt>
+                <dd>
+                    <div *ngIf="customer.contact">
+                        <a [routerLink]="['/contact', customer.contact?.id, 'view']">{{customer.contact?.designation}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.customer.insurance">Insurance</span></dt>
+                <dd>
+                    <div *ngIf="customer.insurance">
+                        <a [routerLink]="['/insurance', customer.insurance?.id, 'view']">{{customer.insurance?.providerNumber}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/customer', customer.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+{
+  "jiotmsappApp": {
+    "StatusEnum": {
+      "null": "",
+      "PICKEDUP": "PICKEDUP",
+      "ONROAD": "ONROAD",
+      "DELIVERED": "DELIVERED"
+    }
+  }
+}
