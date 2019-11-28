@@ -5,7 +5,6 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { IDepartment, Department } from 'app/shared/model/department.model';
 import { DepartmentService } from './department.service';
@@ -40,31 +39,21 @@ export class DepartmentUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ department }) => {
       this.updateForm(department);
     });
-    this.locationService
-      .query({ filter: 'department-is-null' })
-      .pipe(
-        filter((mayBeOk: HttpResponse<ILocation[]>) => mayBeOk.ok),
-        map((response: HttpResponse<ILocation[]>) => response.body)
-      )
-      .subscribe(
-        (res: ILocation[]) => {
-          if (!this.editForm.get('location').value || !this.editForm.get('location').value.id) {
-            this.locations = res;
-          } else {
-            this.locationService
-              .find(this.editForm.get('location').value.id)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<ILocation>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<ILocation>) => subResponse.body)
-              )
-              .subscribe(
-                (subRes: ILocation) => (this.locations = [subRes].concat(res)),
-                (subRes: HttpErrorResponse) => this.onError(subRes.message)
-              );
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+    this.locationService.query({ filter: 'department-is-null' }).subscribe(
+      (res: HttpResponse<ILocation[]>) => {
+        if (!this.editForm.get('location').value || !this.editForm.get('location').value.id) {
+          this.locations = res.body;
+        } else {
+          this.locationService
+            .find(this.editForm.get('location').value.id)
+            .subscribe(
+              (subRes: HttpResponse<ILocation>) => (this.locations = [subRes.body].concat(res.body)),
+              (subRes: HttpErrorResponse) => this.onError(subRes.message)
+            );
+        }
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
   }
 
   updateForm(department: IDepartment) {

@@ -34,7 +34,10 @@
             <thead>
             <tr>
             <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
-            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoiceItem.name">Name</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoiceItem.description">Description</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoiceItem.qty">Qty</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoiceItem.price">Price</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoiceItem.total">Total</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.invoiceItem.status">Status</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.invoiceItem.shipmentNumber">Shipment Number</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.invoiceItem.bol">Bol</span></th>
@@ -44,8 +47,11 @@
             <tbody>
             <tr *ngFor="let invoiceItem of invoiceItems ;trackBy: trackId">
                 <td><a [routerLink]="['/invoice-item', invoiceItem.id, 'view' ]">{{invoiceItem.id}}</a></td>
-                <td>{{invoiceItem.name}}</td>
-                <td jhiTranslate="{{'jiotmsappApp.StatusEnum.' + invoiceItem.status}}">{{invoiceItem.status}}</td>
+                <td>{{invoiceItem.description}}</td>
+                <td>{{invoiceItem.qty}}</td>
+                <td>{{invoiceItem.price}}</td>
+                <td>{{invoiceItem.total}}</td>
+                <td jhiTranslate="{{'jiotmsappApp.InvoiceStatus.' + invoiceItem.status}}">{{invoiceItem.status}}</td>
                 <td>{{invoiceItem.shipmentNumber}}</td>
                 <td>{{invoiceItem.bol}}</td>
                 <td class="text-right">
@@ -62,10 +68,7 @@
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/invoice-item', { outlets: { popup: invoiceItem.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                        <button type="submit" (click)="delete(invoiceItem)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

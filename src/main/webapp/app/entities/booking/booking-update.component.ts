@@ -5,12 +5,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
 import { IBooking, Booking } from 'app/shared/model/booking.model';
 import { BookingService } from './booking.service';
-import { ICustomer } from 'app/shared/model/customer.model';
-import { CustomerService } from 'app/entities/customer/customer.service';
 
 @Component({
   selector: 'jhi-booking-update',
@@ -19,49 +15,24 @@ import { CustomerService } from 'app/entities/customer/customer.service';
 export class BookingUpdateComponent implements OnInit {
   isSaving: boolean;
 
-  customers: ICustomer[];
-
   editForm = this.fb.group({
     id: [],
-    name: [],
-    loadNuber: [],
-    shipmentNumber: [],
-    bol: [],
-    status: [],
-    customer: []
+    name: []
   });
 
-  constructor(
-    protected jhiAlertService: JhiAlertService,
-    protected bookingService: BookingService,
-    protected customerService: CustomerService,
-    protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
-  ) {}
+  constructor(protected bookingService: BookingService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ booking }) => {
       this.updateForm(booking);
     });
-    this.customerService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<ICustomer[]>) => mayBeOk.ok),
-        map((response: HttpResponse<ICustomer[]>) => response.body)
-      )
-      .subscribe((res: ICustomer[]) => (this.customers = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(booking: IBooking) {
     this.editForm.patchValue({
       id: booking.id,
-      name: booking.name,
-      loadNuber: booking.loadNuber,
-      shipmentNumber: booking.shipmentNumber,
-      bol: booking.bol,
-      status: booking.status,
-      customer: booking.customer
+      name: booking.name
     });
   }
 
@@ -83,12 +54,7 @@ export class BookingUpdateComponent implements OnInit {
     return {
       ...new Booking(),
       id: this.editForm.get(['id']).value,
-      name: this.editForm.get(['name']).value,
-      loadNuber: this.editForm.get(['loadNuber']).value,
-      shipmentNumber: this.editForm.get(['shipmentNumber']).value,
-      bol: this.editForm.get(['bol']).value,
-      status: this.editForm.get(['status']).value,
-      customer: this.editForm.get(['customer']).value
+      name: this.editForm.get(['name']).value
     };
   }
 
@@ -103,12 +69,5 @@ export class BookingUpdateComponent implements OnInit {
 
   protected onSaveError() {
     this.isSaving = false;
-  }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
-
-  trackCustomerById(index: number, item: ICustomer) {
-    return item.id;
   }
 }

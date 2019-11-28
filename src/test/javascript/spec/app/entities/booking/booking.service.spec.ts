@@ -3,7 +3,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { take, map } from 'rxjs/operators';
 import { BookingService } from 'app/entities/booking/booking.service';
 import { IBooking, Booking } from 'app/shared/model/booking.model';
-import { StatusEnum } from 'app/shared/model/enumerations/status-enum.model';
 
 describe('Service Tests', () => {
   describe('Booking Service', () => {
@@ -21,7 +20,7 @@ describe('Service Tests', () => {
       service = injector.get(BookingService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new Booking(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', StatusEnum.PICKEDUP);
+      elemDefault = new Booking(0, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -57,11 +56,7 @@ describe('Service Tests', () => {
       it('should update a Booking', () => {
         const returnedFromService = Object.assign(
           {
-            name: 'BBBBBB',
-            loadNuber: 'BBBBBB',
-            shipmentNumber: 'BBBBBB',
-            bol: 'BBBBBB',
-            status: 'BBBBBB'
+            name: 'BBBBBB'
           },
           elemDefault
         );
@@ -79,11 +74,7 @@ describe('Service Tests', () => {
       it('should return a list of Booking', () => {
         const returnedFromService = Object.assign(
           {
-            name: 'BBBBBB',
-            loadNuber: 'BBBBBB',
-            shipmentNumber: 'BBBBBB',
-            bol: 'BBBBBB',
-            status: 'BBBBBB'
+            name: 'BBBBBB'
           },
           elemDefault
         );

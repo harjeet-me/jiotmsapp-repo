@@ -5,20 +5,12 @@ import { JiotmsappSharedModule } from 'app/shared/shared.module';
 import { JobHistoryComponent } from './job-history.component';
 import { JobHistoryDetailComponent } from './job-history-detail.component';
 import { JobHistoryUpdateComponent } from './job-history-update.component';
-import { JobHistoryDeletePopupComponent, JobHistoryDeleteDialogComponent } from './job-history-delete-dialog.component';
-import { jobHistoryRoute, jobHistoryPopupRoute } from './job-history.route';
-
-const ENTITY_STATES = [...jobHistoryRoute, ...jobHistoryPopupRoute];
+import { JobHistoryDeleteDialogComponent } from './job-history-delete-dialog.component';
+import { jobHistoryRoute } from './job-history.route';
 
 @NgModule({
-  imports: [JiotmsappSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    JobHistoryComponent,
-    JobHistoryDetailComponent,
-    JobHistoryUpdateComponent,
-    JobHistoryDeleteDialogComponent,
-    JobHistoryDeletePopupComponent
-  ],
+  imports: [JiotmsappSharedModule, RouterModule.forChild(jobHistoryRoute)],
+  declarations: [JobHistoryComponent, JobHistoryDetailComponent, JobHistoryUpdateComponent, JobHistoryDeleteDialogComponent],
   entryComponents: [JobHistoryDeleteDialogComponent]
 })
 export class JiotmsappJobHistoryModule {}

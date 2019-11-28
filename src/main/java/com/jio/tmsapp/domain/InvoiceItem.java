@@ -7,7 +7,7 @@ import javax.persistence.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 
-import com.jio.tmsapp.domain.enumeration.StatusEnum;
+import com.jio.tmsapp.domain.enumeration.InvoiceStatus;
 
 /**
  * A InvoiceItem.
@@ -25,12 +25,21 @@ public class InvoiceItem implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "qty")
+    private Integer qty;
+
+    @Column(name = "price")
+    private Integer price;
+
+    @Column(name = "total")
+    private Integer total;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private StatusEnum status;
+    private InvoiceStatus status;
 
     @Column(name = "shipment_number")
     private String shipmentNumber;
@@ -47,29 +56,68 @@ public class InvoiceItem implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public InvoiceItem name(String name) {
-        this.name = name;
+    public InvoiceItem description(String description) {
+        this.description = description;
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public StatusEnum getStatus() {
+    public Integer getQty() {
+        return qty;
+    }
+
+    public InvoiceItem qty(Integer qty) {
+        this.qty = qty;
+        return this;
+    }
+
+    public void setQty(Integer qty) {
+        this.qty = qty;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public InvoiceItem price(Integer price) {
+        this.price = price;
+        return this;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public InvoiceItem total(Integer total) {
+        this.total = total;
+        return this;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public InvoiceStatus getStatus() {
         return status;
     }
 
-    public InvoiceItem status(StatusEnum status) {
+    public InvoiceItem status(InvoiceStatus status) {
         this.status = status;
         return this;
     }
 
-    public void setStatus(StatusEnum status) {
+    public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
 
@@ -120,7 +168,10 @@ public class InvoiceItem implements Serializable {
     public String toString() {
         return "InvoiceItem{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", qty=" + getQty() +
+            ", price=" + getPrice() +
+            ", total=" + getTotal() +
             ", status='" + getStatus() + "'" +
             ", shipmentNumber='" + getShipmentNumber() + "'" +
             ", bol='" + getBol() + "'" +

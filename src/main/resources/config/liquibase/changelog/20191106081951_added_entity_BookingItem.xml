@@ -55,12 +55,6 @@
             <column name="recieved_by" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="equipment_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-            <column name="driver_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="main_booking_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -79,7 +73,7 @@
     <!--
         Load sample data generated with Faker.js
         - This data can be easily edited using a CSV editor (or even MS Excel) and
-          is located in the 'src/main/resources/config/liquibase/data' directory
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
         - By default this data is applied when running with the JHipster 'dev' profile.
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.

@@ -41,8 +41,8 @@
             <th scope="col"  jhiSortBy="hireDate"><span jhiTranslate="jiotmsappApp.employee.hireDate">Hire Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="salary"><span jhiTranslate="jiotmsappApp.employee.salary">Salary</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="commissionPct"><span jhiTranslate="jiotmsappApp.employee.commissionPct">Commission Pct</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th scope="col"  jhiSortBy="department.id"><span jhiTranslate="jiotmsappApp.employee.department">Department</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"  jhiSortBy="manager.id"><span jhiTranslate="jiotmsappApp.employee.manager">Manager</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="department.id"><span jhiTranslate="jiotmsappApp.employee.department">Department</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th scope="col"></th>
             </tr>
             </thead>
@@ -57,13 +57,13 @@
                 <td>{{employee.salary}}</td>
                 <td>{{employee.commissionPct}}</td>
                 <td>
-                    <div *ngIf="employee.department">
-                        <a [routerLink]="['/department', employee.department?.id, 'view' ]" >{{employee.department?.id}}</a>
+                    <div *ngIf="employee.manager">
+                        <a [routerLink]="['/employee', employee.manager?.id, 'view' ]" >{{employee.manager?.id}}</a>
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="employee.manager">
-                        <a [routerLink]="['/employee', employee.manager?.id, 'view' ]" >{{employee.manager?.id}}</a>
+                    <div *ngIf="employee.department">
+                        <a [routerLink]="['/department', employee.department?.id, 'view' ]" >{{employee.department?.id}}</a>
                     </div>
                 </td>
                 <td class="text-right">
@@ -80,10 +80,7 @@
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/employee', { outlets: { popup: employee.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                        <button type="submit" (click)="delete(employee)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

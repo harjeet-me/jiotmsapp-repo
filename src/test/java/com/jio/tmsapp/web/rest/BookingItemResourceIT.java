@@ -417,19 +417,4 @@ public class BookingItemResourceIT {
             .andExpect(jsonPath("$.[*].hazmat").value(hasItem(DEFAULT_HAZMAT.booleanValue())))
             .andExpect(jsonPath("$.[*].recievedBy").value(hasItem(DEFAULT_RECIEVED_BY)));
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(BookingItem.class);
-        BookingItem bookingItem1 = new BookingItem();
-        bookingItem1.setId(1L);
-        BookingItem bookingItem2 = new BookingItem();
-        bookingItem2.setId(bookingItem1.getId());
-        assertThat(bookingItem1).isEqualTo(bookingItem2);
-        bookingItem2.setId(2L);
-        assertThat(bookingItem1).isNotEqualTo(bookingItem2);
-        bookingItem1.setId(null);
-        assertThat(bookingItem1).isNotEqualTo(bookingItem2);
-    }
 }

@@ -79,6 +79,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'job-history',
         loadChildren: () => import('./job-history/job-history.module').then(m => m.JiotmsappJobHistoryModule)
+      },
+      {
+        path: 'load-order',
+        loadChildren: () => import('./load-order/load-order.module').then(m => m.JiotmsappLoadOrderModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

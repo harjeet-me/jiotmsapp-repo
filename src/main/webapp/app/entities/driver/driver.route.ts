@@ -1,28 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Driver } from 'app/shared/model/driver.model';
 import { DriverService } from './driver.service';
 import { DriverComponent } from './driver.component';
 import { DriverDetailComponent } from './driver-detail.component';
 import { DriverUpdateComponent } from './driver-update.component';
-import { DriverDeletePopupComponent } from './driver-delete-dialog.component';
 import { IDriver } from 'app/shared/model/driver.model';
 
 @Injectable({ providedIn: 'root' })
 export class DriverResolve implements Resolve<IDriver> {
   constructor(private service: DriverService) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IDriver> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IDriver> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(
-        filter((response: HttpResponse<Driver>) => response.ok),
-        map((driver: HttpResponse<Driver>) => driver.body)
-      );
+      return this.service.find(id).pipe(map((driver: HttpResponse<Driver>) => driver.body));
     }
     return of(new Driver());
   }
@@ -73,21 +69,5 @@ export const driverRoute: Routes = [
       pageTitle: 'jiotmsappApp.driver.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const driverPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: DriverDeletePopupComponent,
-    resolve: {
-      driver: DriverResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'jiotmsappApp.driver.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

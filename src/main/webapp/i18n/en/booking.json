@@ -17,13 +17,7 @@
       "detail": {
         "title": "Booking"
       },
-      "name": "Name",
-      "loadNuber": "Load Nuber",
-      "shipmentNumber": "Shipment Number",
-      "bol": "Bol",
-      "status": "Status",
-      "bookingItem": "Booking Item",
-      "customer": "Customer"
+      "name": "Name"
     }
   }
 }

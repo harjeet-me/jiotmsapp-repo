@@ -1,7 +1,7 @@
 import { ILocation } from 'app/shared/model/location.model';
 import { IContact } from 'app/shared/model/contact.model';
 import { IInsurance } from 'app/shared/model/insurance.model';
-import { IBooking } from 'app/shared/model/booking.model';
+import { ILoadOrder } from 'app/shared/model/load-order.model';
 import { CountryEnum } from 'app/shared/model/enumerations/country-enum.model';
 
 export interface ICustomer {
@@ -22,7 +22,7 @@ export interface ICustomer {
   billingAddress?: ILocation;
   contact?: IContact;
   insurance?: IInsurance;
-  bookings?: IBooking[];
+  loadOrders?: ILoadOrder[];
 }
 
 export class Customer implements ICustomer {
@@ -44,6 +44,6 @@ export class Customer implements ICustomer {
     public billingAddress?: ILocation,
     public contact?: IContact,
     public insurance?: IInsurance,
-    public bookings?: IBooking[]
+    public loadOrders?: ILoadOrder[]
   ) {}
 }

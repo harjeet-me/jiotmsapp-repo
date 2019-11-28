@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IVendor } from 'app/shared/model/vendor.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { VendorService } from './vendor.service';
+import { VendorDeleteDialogComponent } from './vendor-delete-dialog.component';
 
 @Component({
   selector: 'jhi-vendor',
@@ -16,15 +15,14 @@ import { VendorService } from './vendor.service';
 })
 export class VendorComponent implements OnInit, OnDestroy {
   vendors: IVendor[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected vendorService: VendorService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class VendorComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<IVendor[]>) => res.ok),
-          map((res: HttpResponse<IVendor[]>) => res.body)
-        )
-        .subscribe((res: IVendor[]) => (this.vendors = res));
+        .subscribe((res: HttpResponse<IVendor[]>) => (this.vendors = res.body));
       return;
     }
-    this.vendorService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IVendor[]>) => res.ok),
-        map((res: HttpResponse<IVendor[]>) => res.body)
-      )
-      .subscribe((res: IVendor[]) => {
-        this.vendors = res;
-        this.currentSearch = '';
-      });
+    this.vendorService.query().subscribe((res: HttpResponse<IVendor[]>) => {
+      this.vendors = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class VendorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInVendors();
   }
 
@@ -87,6 +72,11 @@ export class VendorComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInVendors() {
-    this.eventSubscriber = this.eventManager.subscribe('vendorListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('vendorListModification', () => this.loadAll());
+  }
+
+  delete(vendor: IVendor) {
+    const modalRef = this.modalService.open(VendorDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.vendor = vendor;
   }
 }

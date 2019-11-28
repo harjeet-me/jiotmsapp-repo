@@ -20,8 +20,8 @@
       "jobTitle": "Job Title",
       "minSalary": "Min Salary",
       "maxSalary": "Max Salary",
-      "employee": "Employee",
-      "task": "Task"
+      "task": "Task",
+      "employee": "Employee"
     }
   }
 }

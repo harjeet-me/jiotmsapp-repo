@@ -2,13 +2,25 @@
     "name": "InvoiceItem",
     "fields": [
         {
-            "fieldName": "name",
+            "fieldName": "description",
             "fieldType": "String"
         },
         {
+            "fieldName": "qty",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "price",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "total",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "status",
-            "fieldType": "StatusEnum",
-            "fieldValues": "PICKEDUP,ONROAD,DELIVERED"
+            "fieldType": "InvoiceStatus",
+            "fieldValues": "DRAFT,GENERATED,SENT,PAID,OVERDRAFT,VOIDED,PARTIALLY_PAID"
         },
         {
             "fieldName": "shipmentNumber",

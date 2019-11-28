@@ -2,15 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IJobHistory } from 'app/shared/model/job-history.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { JobHistoryService } from './job-history.service';
+import { JobHistoryDeleteDialogComponent } from './job-history-delete-dialog.component';
 
 @Component({
   selector: 'jhi-job-history',
@@ -18,7 +17,6 @@ import { JobHistoryService } from './job-history.service';
 })
 export class JobHistoryComponent implements OnInit, OnDestroy {
   jobHistories: IJobHistory[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   itemsPerPage: number;
   links: any;
@@ -31,9 +29,9 @@ export class JobHistoryComponent implements OnInit, OnDestroy {
   constructor(
     protected jobHistoryService: JobHistoryService,
     protected eventManager: JhiEventManager,
+    protected modalService: NgbModal,
     protected parseLinks: JhiParseLinks,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected activatedRoute: ActivatedRoute
   ) {
     this.jobHistories = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
@@ -110,9 +108,6 @@ export class JobHistoryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInJobHistories();
   }
 
@@ -125,7 +120,12 @@ export class JobHistoryComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInJobHistories() {
-    this.eventSubscriber = this.eventManager.subscribe('jobHistoryListModification', response => this.reset());
+    this.eventSubscriber = this.eventManager.subscribe('jobHistoryListModification', () => this.reset());
+  }
+
+  delete(jobHistory: IJobHistory) {
+    const modalRef = this.modalService.open(JobHistoryDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.jobHistory = jobHistory;
   }
 
   sort() {

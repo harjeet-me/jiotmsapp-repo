@@ -6,8 +6,11 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
+import { JhiAlertService } from 'ng-jhipster';
 import { IDriver, Driver } from 'app/shared/model/driver.model';
 import { DriverService } from './driver.service';
+import { IBookingItem } from 'app/shared/model/booking-item.model';
+import { BookingItemService } from 'app/entities/booking-item/booking-item.service';
 
 @Component({
   selector: 'jhi-driver-update',
@@ -15,6 +18,8 @@ import { DriverService } from './driver.service';
 })
 export class DriverUpdateComponent implements OnInit {
   isSaving: boolean;
+
+  bookingitems: IBookingItem[];
   dobDp: any;
 
   editForm = this.fb.group({
@@ -25,16 +30,29 @@ export class DriverUpdateComponent implements OnInit {
     email: [],
     phoneNumber: [],
     licenceNumber: [],
-    dob: []
+    dob: [],
+    bookingItem: []
   });
 
-  constructor(protected driverService: DriverService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected jhiAlertService: JhiAlertService,
+    protected driverService: DriverService,
+    protected bookingItemService: BookingItemService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.isSaving = false;
     this.activatedRoute.data.subscribe(({ driver }) => {
       this.updateForm(driver);
     });
+    this.bookingItemService
+      .query()
+      .subscribe(
+        (res: HttpResponse<IBookingItem[]>) => (this.bookingitems = res.body),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   updateForm(driver: IDriver) {
@@ -46,7 +64,8 @@ export class DriverUpdateComponent implements OnInit {
       email: driver.email,
       phoneNumber: driver.phoneNumber,
       licenceNumber: driver.licenceNumber,
-      dob: driver.dob
+      dob: driver.dob,
+      bookingItem: driver.bookingItem
     });
   }
 
@@ -74,7 +93,8 @@ export class DriverUpdateComponent implements OnInit {
       email: this.editForm.get(['email']).value,
       phoneNumber: this.editForm.get(['phoneNumber']).value,
       licenceNumber: this.editForm.get(['licenceNumber']).value,
-      dob: this.editForm.get(['dob']).value
+      dob: this.editForm.get(['dob']).value,
+      bookingItem: this.editForm.get(['bookingItem']).value
     };
   }
 
@@ -89,5 +109,12 @@ export class DriverUpdateComponent implements OnInit {
 
   protected onSaveError() {
     this.isSaving = false;
+  }
+  protected onError(errorMessage: string) {
+    this.jhiAlertService.error(errorMessage, null, null);
+  }
+
+  trackBookingItemById(index: number, item: IBookingItem) {
+    return item.id;
   }
 }

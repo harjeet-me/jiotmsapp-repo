@@ -5,13 +5,25 @@
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="jiotmsappApp.invoice.bookingNo">Booking No</span></dt>
+                <dt><span jhiTranslate="jiotmsappApp.invoice.orderNo">Order No</span></dt>
                 <dd>
-                    <span>{{invoice.bookingNo}}</span>
+                    <span>{{invoice.orderNo}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.invoice.invoiceTaxTotal">Invoice Tax Total</span></dt>
+                <dd>
+                    <span>{{invoice.invoiceTaxTotal}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.invoice.invoiceSubTotal">Invoice Sub Total</span></dt>
+                <dd>
+                    <span>{{invoice.invoiceSubTotal}}</span>
                 </dd>
                 <dt><span jhiTranslate="jiotmsappApp.invoice.invoiceTotal">Invoice Total</span></dt>
                 <dd>
                     <span>{{invoice.invoiceTotal}}</span>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.invoice.invoiceDate">Invoice Date</span></dt>
+                <dd>
+                    <span>{{invoice.invoiceDate}}</span>
                 </dd>
                 <dt><span jhiTranslate="jiotmsappApp.invoice.invoiceDueDate">Invoice Due Date</span></dt>
                 <dd>
@@ -19,7 +31,7 @@
                 </dd>
                 <dt><span jhiTranslate="jiotmsappApp.invoice.status">Status</span></dt>
                 <dd>
-                    <span jhiTranslate="{{'jiotmsappApp.StatusEnum.' + invoice.status}}">{{invoice.status}}</span>
+                    <span jhiTranslate="{{'jiotmsappApp.InvoiceStatus.' + invoice.status}}">{{invoice.status}}</span>
                 </dd>
                 <dt><span jhiTranslate="jiotmsappApp.invoice.invoiceTo">Invoice To</span></dt>
                 <dd>

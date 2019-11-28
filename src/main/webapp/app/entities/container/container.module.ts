@@ -5,20 +5,12 @@ import { JiotmsappSharedModule } from 'app/shared/shared.module';
 import { ContainerComponent } from './container.component';
 import { ContainerDetailComponent } from './container-detail.component';
 import { ContainerUpdateComponent } from './container-update.component';
-import { ContainerDeletePopupComponent, ContainerDeleteDialogComponent } from './container-delete-dialog.component';
-import { containerRoute, containerPopupRoute } from './container.route';
-
-const ENTITY_STATES = [...containerRoute, ...containerPopupRoute];
+import { ContainerDeleteDialogComponent } from './container-delete-dialog.component';
+import { containerRoute } from './container.route';
 
 @NgModule({
-  imports: [JiotmsappSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    ContainerComponent,
-    ContainerDetailComponent,
-    ContainerUpdateComponent,
-    ContainerDeleteDialogComponent,
-    ContainerDeletePopupComponent
-  ],
+  imports: [JiotmsappSharedModule, RouterModule.forChild(containerRoute)],
+  declarations: [ContainerComponent, ContainerDetailComponent, ContainerUpdateComponent, ContainerDeleteDialogComponent],
   entryComponents: [ContainerDeleteDialogComponent]
 })
 export class JiotmsappContainerModule {}

@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IContainer } from 'app/shared/model/container.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { ContainerService } from './container.service';
+import { ContainerDeleteDialogComponent } from './container-delete-dialog.component';
 
 @Component({
   selector: 'jhi-container',
@@ -16,15 +15,14 @@ import { ContainerService } from './container.service';
 })
 export class ContainerComponent implements OnInit, OnDestroy {
   containers: IContainer[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected containerService: ContainerService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class ContainerComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<IContainer[]>) => res.ok),
-          map((res: HttpResponse<IContainer[]>) => res.body)
-        )
-        .subscribe((res: IContainer[]) => (this.containers = res));
+        .subscribe((res: HttpResponse<IContainer[]>) => (this.containers = res.body));
       return;
     }
-    this.containerService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IContainer[]>) => res.ok),
-        map((res: HttpResponse<IContainer[]>) => res.body)
-      )
-      .subscribe((res: IContainer[]) => {
-        this.containers = res;
-        this.currentSearch = '';
-      });
+    this.containerService.query().subscribe((res: HttpResponse<IContainer[]>) => {
+      this.containers = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class ContainerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInContainers();
   }
 
@@ -87,6 +72,11 @@ export class ContainerComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInContainers() {
-    this.eventSubscriber = this.eventManager.subscribe('containerListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('containerListModification', () => this.loadAll());
+  }
+
+  delete(container: IContainer) {
+    const modalRef = this.modalService.open(ContainerDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.container = container;
   }
 }

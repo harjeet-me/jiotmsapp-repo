@@ -46,8 +46,6 @@
             <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.pod">Pod</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.hazmat">Hazmat</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.recievedBy">Recieved By</span></th>
-            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.equipment">Equipment</span></th>
-            <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.driver">Driver</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.bookingItem.mainBooking">Main Booking</span></th>
             <th scope="col"></th>
             </tr>
@@ -73,18 +71,8 @@
                 <td>{{bookingItem.hazmat}}</td>
                 <td>{{bookingItem.recievedBy}}</td>
                 <td>
-                    <div *ngIf="bookingItem.equipment">
-                        <a [routerLink]="['/equipment', bookingItem.equipment?.id, 'view' ]" >{{bookingItem.equipment?.number}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="bookingItem.driver">
-                        <a [routerLink]="['/driver', bookingItem.driver?.id, 'view' ]" >{{bookingItem.driver?.firstName}}</a>
-                    </div>
-                </td>
-                <td>
                     <div *ngIf="bookingItem.mainBooking">
-                        <a [routerLink]="['/booking', bookingItem.mainBooking?.id, 'view' ]" >{{bookingItem.mainBooking?.name}}</a>
+                        <a [routerLink]="['/load-order', bookingItem.mainBooking?.id, 'view' ]" >{{bookingItem.mainBooking?.name}}</a>
                     </div>
                 </td>
                 <td class="text-right">
@@ -101,10 +89,7 @@
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/booking-item', { outlets: { popup: bookingItem.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                        <button type="submit" (click)="delete(bookingItem)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

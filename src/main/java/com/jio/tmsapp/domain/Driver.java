@@ -1,4 +1,5 @@
 package com.jio.tmsapp.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -7,8 +8,6 @@ import javax.persistence.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A Driver.
@@ -47,9 +46,9 @@ public class Driver implements Serializable {
     @Column(name = "dob")
     private LocalDate dob;
 
-    @OneToMany(mappedBy = "driver")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<BookingItem> bookingItems = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties("drivers")
+    private BookingItem bookingItem;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -151,29 +150,17 @@ public class Driver implements Serializable {
         this.dob = dob;
     }
 
-    public Set<BookingItem> getBookingItems() {
-        return bookingItems;
+    public BookingItem getBookingItem() {
+        return bookingItem;
     }
 
-    public Driver bookingItems(Set<BookingItem> bookingItems) {
-        this.bookingItems = bookingItems;
+    public Driver bookingItem(BookingItem bookingItem) {
+        this.bookingItem = bookingItem;
         return this;
     }
 
-    public Driver addBookingItem(BookingItem bookingItem) {
-        this.bookingItems.add(bookingItem);
-        bookingItem.setDriver(this);
-        return this;
-    }
-
-    public Driver removeBookingItem(BookingItem bookingItem) {
-        this.bookingItems.remove(bookingItem);
-        bookingItem.setDriver(null);
-        return this;
-    }
-
-    public void setBookingItems(Set<BookingItem> bookingItems) {
-        this.bookingItems = bookingItems;
+    public void setBookingItem(BookingItem bookingItem) {
+        this.bookingItem = bookingItem;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

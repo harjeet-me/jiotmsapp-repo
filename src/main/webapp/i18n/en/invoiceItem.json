@@ -17,7 +17,10 @@
       "detail": {
         "title": "Invoice Item"
       },
-      "name": "Name",
+      "description": "Description",
+      "qty": "Qty",
+      "price": "Price",
+      "total": "Total",
       "status": "Status",
       "shipmentNumber": "Shipment Number",
       "bol": "Bol"

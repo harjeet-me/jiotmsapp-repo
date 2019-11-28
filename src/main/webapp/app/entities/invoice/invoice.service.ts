@@ -60,13 +60,15 @@ export class InvoiceService {
 
   protected convertDateFromClient(invoice: IInvoice): IInvoice {
     const copy: IInvoice = Object.assign({}, invoice, {
-      invoiceDueDate: invoice.invoiceDueDate != null && invoice.invoiceDueDate.isValid() ? invoice.invoiceDueDate.toJSON() : null
+      invoiceDate: invoice.invoiceDate != null && invoice.invoiceDate.isValid() ? invoice.invoiceDate.format(DATE_FORMAT) : null,
+      invoiceDueDate: invoice.invoiceDueDate != null && invoice.invoiceDueDate.isValid() ? invoice.invoiceDueDate.format(DATE_FORMAT) : null
     });
     return copy;
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
+      res.body.invoiceDate = res.body.invoiceDate != null ? moment(res.body.invoiceDate) : null;
       res.body.invoiceDueDate = res.body.invoiceDueDate != null ? moment(res.body.invoiceDueDate) : null;
     }
     return res;
@@ -75,6 +77,7 @@ export class InvoiceService {
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((invoice: IInvoice) => {
+        invoice.invoiceDate = invoice.invoiceDate != null ? moment(invoice.invoiceDate) : null;
         invoice.invoiceDueDate = invoice.invoiceDueDate != null ? moment(invoice.invoiceDueDate) : null;
       });
     }

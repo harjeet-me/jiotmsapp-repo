@@ -28,7 +28,7 @@
         {
             "fieldName": "status",
             "fieldType": "StatusEnum",
-            "fieldValues": "PICKEDUP,ONROAD,DELIVERED"
+            "fieldValues": "PICKEDUP,ONROAD,DELIVERED,INVOICED"
         },
         {
             "fieldName": "detention",
@@ -54,22 +54,20 @@
     ],
     "relationships": [
         {
-            "relationshipType": "many-to-one",
+            "relationshipType": "one-to-many",
             "otherEntityName": "equipment",
             "otherEntityRelationshipName": "bookingItem",
-            "relationshipName": "equipment",
-            "otherEntityField": "number"
+            "relationshipName": "equipment"
         },
         {
-            "relationshipType": "many-to-one",
+            "relationshipType": "one-to-many",
             "otherEntityName": "driver",
             "otherEntityRelationshipName": "bookingItem",
-            "relationshipName": "driver",
-            "otherEntityField": "firstName"
+            "relationshipName": "driver"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "booking",
+            "otherEntityName": "loadOrder",
             "otherEntityRelationshipName": "bookingItem",
             "relationshipName": "mainBooking",
             "otherEntityField": "name"

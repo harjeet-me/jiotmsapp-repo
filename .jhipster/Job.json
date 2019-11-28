@@ -16,18 +16,19 @@
     ],
     "relationships": [
         {
-            "relationshipName": "employee",
-            "otherEntityName": "employee",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "id"
-        },
-        {
             "relationshipType": "many-to-many",
             "otherEntityName": "task",
             "otherEntityRelationshipName": "job",
             "relationshipName": "task",
             "otherEntityField": "title",
             "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "employee",
+            "otherEntityRelationshipName": "job",
+            "relationshipName": "employee",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20191106082003",

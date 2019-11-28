@@ -1,0 +1,39 @@
+{
+  "jiotmsappApp": {
+    "loadOrder": {
+      "home": {
+        "title": "Load Orders",
+        "createLabel": "Create a new Load Order",
+        "createOrEditLabel": "Create or edit a Load Order",
+        "search": "Search for Load Order",
+        "notFound": "No Load Orders found"
+      },
+      "created": "A new Load Order is created with identifier {{ param }}",
+      "updated": "A Load Order is updated with identifier {{ param }}",
+      "deleted": "A Load Order is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Load Order {{ id }}?"
+      },
+      "detail": {
+        "title": "Load Order"
+      },
+      "orderNuber": "Order Nuber",
+      "description": "Description",
+      "shipmentNumber": "Shipment Number",
+      "bol": "Bol",
+      "pickup": "Pickup",
+      "drop": "Drop",
+      "pickupLocation": "Pickup Location",
+      "dropLocation": "Drop Location",
+      "currentLocation": "Current Location",
+      "status": "Status",
+      "detention": "Detention",
+      "chasisInTime": "Chasis In Time",
+      "pod": "Pod",
+      "hazmat": "Hazmat",
+      "recievedBy": "Recieved By",
+      "bookingItem": "Booking Item",
+      "customer": "Customer"
+    }
+  }
+}

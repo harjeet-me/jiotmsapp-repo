@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IInvoiceItem } from 'app/shared/model/invoice-item.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { InvoiceItemService } from './invoice-item.service';
+import { InvoiceItemDeleteDialogComponent } from './invoice-item-delete-dialog.component';
 
 @Component({
   selector: 'jhi-invoice-item',
@@ -16,15 +15,14 @@ import { InvoiceItemService } from './invoice-item.service';
 })
 export class InvoiceItemComponent implements OnInit, OnDestroy {
   invoiceItems: IInvoiceItem[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected invoiceItemService: InvoiceItemService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class InvoiceItemComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<IInvoiceItem[]>) => res.ok),
-          map((res: HttpResponse<IInvoiceItem[]>) => res.body)
-        )
-        .subscribe((res: IInvoiceItem[]) => (this.invoiceItems = res));
+        .subscribe((res: HttpResponse<IInvoiceItem[]>) => (this.invoiceItems = res.body));
       return;
     }
-    this.invoiceItemService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IInvoiceItem[]>) => res.ok),
-        map((res: HttpResponse<IInvoiceItem[]>) => res.body)
-      )
-      .subscribe((res: IInvoiceItem[]) => {
-        this.invoiceItems = res;
-        this.currentSearch = '';
-      });
+    this.invoiceItemService.query().subscribe((res: HttpResponse<IInvoiceItem[]>) => {
+      this.invoiceItems = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class InvoiceItemComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInInvoiceItems();
   }
 
@@ -87,6 +72,11 @@ export class InvoiceItemComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInInvoiceItems() {
-    this.eventSubscriber = this.eventManager.subscribe('invoiceItemListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('invoiceItemListModification', () => this.loadAll());
+  }
+
+  delete(invoiceItem: IInvoiceItem) {
+    const modalRef = this.modalService.open(InvoiceItemDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.invoiceItem = invoiceItem;
   }
 }

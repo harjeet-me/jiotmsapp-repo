@@ -5,7 +5,6 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { ILocation, Location } from 'app/shared/model/location.model';
 import { LocationService } from './location.service';
@@ -46,11 +45,7 @@ export class LocationUpdateComponent implements OnInit {
     });
     this.customerService
       .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<ICustomer[]>) => mayBeOk.ok),
-        map((response: HttpResponse<ICustomer[]>) => response.body)
-      )
-      .subscribe((res: ICustomer[]) => (this.customers = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe((res: HttpResponse<ICustomer[]>) => (this.customers = res.body), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(location: ILocation) {

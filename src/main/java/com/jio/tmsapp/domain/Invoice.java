@@ -7,9 +7,9 @@ import javax.persistence.*;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 
-import com.jio.tmsapp.domain.enumeration.StatusEnum;
+import com.jio.tmsapp.domain.enumeration.InvoiceStatus;
 
 /**
  * A Invoice.
@@ -27,18 +27,27 @@ public class Invoice implements Serializable {
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
-    @Column(name = "booking_no")
-    private String bookingNo;
+    @Column(name = "order_no")
+    private String orderNo;
+
+    @Column(name = "invoice_tax_total")
+    private Double invoiceTaxTotal;
+
+    @Column(name = "invoice_sub_total")
+    private Double invoiceSubTotal;
 
     @Column(name = "invoice_total")
     private Double invoiceTotal;
 
+    @Column(name = "invoice_date")
+    private LocalDate invoiceDate;
+
     @Column(name = "invoice_due_date")
-    private Instant invoiceDueDate;
+    private LocalDate invoiceDueDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private StatusEnum status;
+    private InvoiceStatus status;
 
     @ManyToOne
     @JsonIgnoreProperties("invoices")
@@ -53,17 +62,43 @@ public class Invoice implements Serializable {
         this.id = id;
     }
 
-    public String getBookingNo() {
-        return bookingNo;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public Invoice bookingNo(String bookingNo) {
-        this.bookingNo = bookingNo;
+    public Invoice orderNo(String orderNo) {
+        this.orderNo = orderNo;
         return this;
     }
 
-    public void setBookingNo(String bookingNo) {
-        this.bookingNo = bookingNo;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public Double getInvoiceTaxTotal() {
+        return invoiceTaxTotal;
+    }
+
+    public Invoice invoiceTaxTotal(Double invoiceTaxTotal) {
+        this.invoiceTaxTotal = invoiceTaxTotal;
+        return this;
+    }
+
+    public void setInvoiceTaxTotal(Double invoiceTaxTotal) {
+        this.invoiceTaxTotal = invoiceTaxTotal;
+    }
+
+    public Double getInvoiceSubTotal() {
+        return invoiceSubTotal;
+    }
+
+    public Invoice invoiceSubTotal(Double invoiceSubTotal) {
+        this.invoiceSubTotal = invoiceSubTotal;
+        return this;
+    }
+
+    public void setInvoiceSubTotal(Double invoiceSubTotal) {
+        this.invoiceSubTotal = invoiceSubTotal;
     }
 
     public Double getInvoiceTotal() {
@@ -79,29 +114,42 @@ public class Invoice implements Serializable {
         this.invoiceTotal = invoiceTotal;
     }
 
-    public Instant getInvoiceDueDate() {
+    public LocalDate getInvoiceDate() {
+        return invoiceDate;
+    }
+
+    public Invoice invoiceDate(LocalDate invoiceDate) {
+        this.invoiceDate = invoiceDate;
+        return this;
+    }
+
+    public void setInvoiceDate(LocalDate invoiceDate) {
+        this.invoiceDate = invoiceDate;
+    }
+
+    public LocalDate getInvoiceDueDate() {
         return invoiceDueDate;
     }
 
-    public Invoice invoiceDueDate(Instant invoiceDueDate) {
+    public Invoice invoiceDueDate(LocalDate invoiceDueDate) {
         this.invoiceDueDate = invoiceDueDate;
         return this;
     }
 
-    public void setInvoiceDueDate(Instant invoiceDueDate) {
+    public void setInvoiceDueDate(LocalDate invoiceDueDate) {
         this.invoiceDueDate = invoiceDueDate;
     }
 
-    public StatusEnum getStatus() {
+    public InvoiceStatus getStatus() {
         return status;
     }
 
-    public Invoice status(StatusEnum status) {
+    public Invoice status(InvoiceStatus status) {
         this.status = status;
         return this;
     }
 
-    public void setStatus(StatusEnum status) {
+    public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
 
@@ -139,8 +187,11 @@ public class Invoice implements Serializable {
     public String toString() {
         return "Invoice{" +
             "id=" + getId() +
-            ", bookingNo='" + getBookingNo() + "'" +
+            ", orderNo='" + getOrderNo() + "'" +
+            ", invoiceTaxTotal=" + getInvoiceTaxTotal() +
+            ", invoiceSubTotal=" + getInvoiceSubTotal() +
             ", invoiceTotal=" + getInvoiceTotal() +
+            ", invoiceDate='" + getInvoiceDate() + "'" +
             ", invoiceDueDate='" + getInvoiceDueDate() + "'" +
             ", status='" + getStatus() + "'" +
             "}";

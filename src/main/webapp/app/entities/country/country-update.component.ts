@@ -5,7 +5,6 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { ICountry, Country } from 'app/shared/model/country.model';
 import { CountryService } from './country.service';
@@ -40,31 +39,21 @@ export class CountryUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ country }) => {
       this.updateForm(country);
     });
-    this.regionService
-      .query({ filter: 'country-is-null' })
-      .pipe(
-        filter((mayBeOk: HttpResponse<IRegion[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IRegion[]>) => response.body)
-      )
-      .subscribe(
-        (res: IRegion[]) => {
-          if (!this.editForm.get('region').value || !this.editForm.get('region').value.id) {
-            this.regions = res;
-          } else {
-            this.regionService
-              .find(this.editForm.get('region').value.id)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<IRegion>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<IRegion>) => subResponse.body)
-              )
-              .subscribe(
-                (subRes: IRegion) => (this.regions = [subRes].concat(res)),
-                (subRes: HttpErrorResponse) => this.onError(subRes.message)
-              );
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+    this.regionService.query({ filter: 'country-is-null' }).subscribe(
+      (res: HttpResponse<IRegion[]>) => {
+        if (!this.editForm.get('region').value || !this.editForm.get('region').value.id) {
+          this.regions = res.body;
+        } else {
+          this.regionService
+            .find(this.editForm.get('region').value.id)
+            .subscribe(
+              (subRes: HttpResponse<IRegion>) => (this.regions = [subRes.body].concat(res.body)),
+              (subRes: HttpErrorResponse) => this.onError(subRes.message)
+            );
+        }
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
   }
 
   updateForm(country: ICountry) {

@@ -35,16 +35,16 @@ public class Job implements Serializable {
     @Column(name = "max_salary")
     private Long maxSalary;
 
-    @ManyToOne
-    @JsonIgnoreProperties("jobs")
-    private Employee employee;
-
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "job_task",
                joinColumns = @JoinColumn(name = "job_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
     private Set<Task> tasks = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties("jobs")
+    private Employee employee;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -94,19 +94,6 @@ public class Job implements Serializable {
         this.maxSalary = maxSalary;
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public Job employee(Employee employee) {
-        this.employee = employee;
-        return this;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
     public Set<Task> getTasks() {
         return tasks;
     }
@@ -130,6 +117,19 @@ public class Job implements Serializable {
 
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public Job employee(Employee employee) {
+        this.employee = employee;
+        return this;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

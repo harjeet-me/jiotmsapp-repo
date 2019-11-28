@@ -5,20 +5,12 @@ import { JiotmsappSharedModule } from 'app/shared/shared.module';
 import { LocationComponent } from './location.component';
 import { LocationDetailComponent } from './location-detail.component';
 import { LocationUpdateComponent } from './location-update.component';
-import { LocationDeletePopupComponent, LocationDeleteDialogComponent } from './location-delete-dialog.component';
-import { locationRoute, locationPopupRoute } from './location.route';
-
-const ENTITY_STATES = [...locationRoute, ...locationPopupRoute];
+import { LocationDeleteDialogComponent } from './location-delete-dialog.component';
+import { locationRoute } from './location.route';
 
 @NgModule({
-  imports: [JiotmsappSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    LocationComponent,
-    LocationDetailComponent,
-    LocationUpdateComponent,
-    LocationDeleteDialogComponent,
-    LocationDeletePopupComponent
-  ],
+  imports: [JiotmsappSharedModule, RouterModule.forChild(locationRoute)],
+  declarations: [LocationComponent, LocationDetailComponent, LocationUpdateComponent, LocationDeleteDialogComponent],
   entryComponents: [LocationDeleteDialogComponent]
 })
 export class JiotmsappLocationModule {}

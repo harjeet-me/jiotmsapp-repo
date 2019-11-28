@@ -35,6 +35,13 @@
                            formControlName="insurance"/>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.equipment.bookingItem" for="field_bookingItem">Booking Item</label>
+                    <select class="form-control" id="field_bookingItem" name="bookingItem" formControlName="bookingItem">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="bookingItemOption.id === editForm.get('bookingItem').value?.id ? editForm.get('bookingItem').value : bookingItemOption" *ngFor="let bookingItemOption of bookingitems; trackBy: trackBookingItemById">{{bookingItemOption.id}}</option>
+                    </select>
+                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

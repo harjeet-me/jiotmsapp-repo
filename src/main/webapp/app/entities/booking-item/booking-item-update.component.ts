@@ -5,18 +5,13 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 import { IBookingItem, BookingItem } from 'app/shared/model/booking-item.model';
 import { BookingItemService } from './booking-item.service';
-import { IEquipment } from 'app/shared/model/equipment.model';
-import { EquipmentService } from 'app/entities/equipment/equipment.service';
-import { IDriver } from 'app/shared/model/driver.model';
-import { DriverService } from 'app/entities/driver/driver.service';
-import { IBooking } from 'app/shared/model/booking.model';
-import { BookingService } from 'app/entities/booking/booking.service';
+import { ILoadOrder } from 'app/shared/model/load-order.model';
+import { LoadOrderService } from 'app/entities/load-order/load-order.service';
 
 @Component({
   selector: 'jhi-booking-item-update',
@@ -25,11 +20,7 @@ import { BookingService } from 'app/entities/booking/booking.service';
 export class BookingItemUpdateComponent implements OnInit {
   isSaving: boolean;
 
-  equipment: IEquipment[];
-
-  drivers: IDriver[];
-
-  bookings: IBooking[];
+  loadorders: ILoadOrder[];
 
   editForm = this.fb.group({
     id: [],
@@ -46,8 +37,6 @@ export class BookingItemUpdateComponent implements OnInit {
     podContentType: [],
     hazmat: [],
     recievedBy: [],
-    equipment: [],
-    driver: [],
     mainBooking: []
   });
 
@@ -55,9 +44,7 @@ export class BookingItemUpdateComponent implements OnInit {
     protected dataUtils: JhiDataUtils,
     protected jhiAlertService: JhiAlertService,
     protected bookingItemService: BookingItemService,
-    protected equipmentService: EquipmentService,
-    protected driverService: DriverService,
-    protected bookingService: BookingService,
+    protected loadOrderService: LoadOrderService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
@@ -68,27 +55,9 @@ export class BookingItemUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ bookingItem }) => {
       this.updateForm(bookingItem);
     });
-    this.equipmentService
+    this.loadOrderService
       .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IEquipment[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IEquipment[]>) => response.body)
-      )
-      .subscribe((res: IEquipment[]) => (this.equipment = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.driverService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IDriver[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IDriver[]>) => response.body)
-      )
-      .subscribe((res: IDriver[]) => (this.drivers = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.bookingService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IBooking[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IBooking[]>) => response.body)
-      )
-      .subscribe((res: IBooking[]) => (this.bookings = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe((res: HttpResponse<ILoadOrder[]>) => (this.loadorders = res.body), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(bookingItem: IBookingItem) {
@@ -107,8 +76,6 @@ export class BookingItemUpdateComponent implements OnInit {
       podContentType: bookingItem.podContentType,
       hazmat: bookingItem.hazmat,
       recievedBy: bookingItem.recievedBy,
-      equipment: bookingItem.equipment,
-      driver: bookingItem.driver,
       mainBooking: bookingItem.mainBooking
     });
   }
@@ -188,8 +155,6 @@ export class BookingItemUpdateComponent implements OnInit {
       pod: this.editForm.get(['pod']).value,
       hazmat: this.editForm.get(['hazmat']).value,
       recievedBy: this.editForm.get(['recievedBy']).value,
-      equipment: this.editForm.get(['equipment']).value,
-      driver: this.editForm.get(['driver']).value,
       mainBooking: this.editForm.get(['mainBooking']).value
     };
   }
@@ -210,15 +175,7 @@ export class BookingItemUpdateComponent implements OnInit {
     this.jhiAlertService.error(errorMessage, null, null);
   }
 
-  trackEquipmentById(index: number, item: IEquipment) {
-    return item.id;
-  }
-
-  trackDriverById(index: number, item: IDriver) {
-    return item.id;
-  }
-
-  trackBookingById(index: number, item: IBooking) {
+  trackLoadOrderById(index: number, item: ILoadOrder) {
     return item.id;
   }
 }

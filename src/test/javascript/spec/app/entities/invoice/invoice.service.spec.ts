@@ -2,10 +2,10 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { take, map } from 'rxjs/operators';
 import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { InvoiceService } from 'app/entities/invoice/invoice.service';
 import { IInvoice, Invoice } from 'app/shared/model/invoice.model';
-import { StatusEnum } from 'app/shared/model/enumerations/status-enum.model';
+import { InvoiceStatus } from 'app/shared/model/enumerations/invoice-status.model';
 
 describe('Service Tests', () => {
   describe('Invoice Service', () => {
@@ -25,14 +25,15 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Invoice(0, 'AAAAAAA', 0, currentDate, StatusEnum.PICKEDUP);
+      elemDefault = new Invoice(0, 'AAAAAAA', 0, 0, 0, currentDate, currentDate, InvoiceStatus.DRAFT);
     });
 
     describe('Service methods', () => {
       it('should find an element', () => {
         const returnedFromService = Object.assign(
           {
-            invoiceDueDate: currentDate.format(DATE_TIME_FORMAT)
+            invoiceDate: currentDate.format(DATE_FORMAT),
+            invoiceDueDate: currentDate.format(DATE_FORMAT)
           },
           elemDefault
         );
@@ -50,12 +51,14 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 0,
-            invoiceDueDate: currentDate.format(DATE_TIME_FORMAT)
+            invoiceDate: currentDate.format(DATE_FORMAT),
+            invoiceDueDate: currentDate.format(DATE_FORMAT)
           },
           elemDefault
         );
         const expected = Object.assign(
           {
+            invoiceDate: currentDate,
             invoiceDueDate: currentDate
           },
           returnedFromService
@@ -72,9 +75,12 @@ describe('Service Tests', () => {
       it('should update a Invoice', () => {
         const returnedFromService = Object.assign(
           {
-            bookingNo: 'BBBBBB',
+            orderNo: 'BBBBBB',
+            invoiceTaxTotal: 1,
+            invoiceSubTotal: 1,
             invoiceTotal: 1,
-            invoiceDueDate: currentDate.format(DATE_TIME_FORMAT),
+            invoiceDate: currentDate.format(DATE_FORMAT),
+            invoiceDueDate: currentDate.format(DATE_FORMAT),
             status: 'BBBBBB'
           },
           elemDefault
@@ -82,6 +88,7 @@ describe('Service Tests', () => {
 
         const expected = Object.assign(
           {
+            invoiceDate: currentDate,
             invoiceDueDate: currentDate
           },
           returnedFromService
@@ -98,15 +105,19 @@ describe('Service Tests', () => {
       it('should return a list of Invoice', () => {
         const returnedFromService = Object.assign(
           {
-            bookingNo: 'BBBBBB',
+            orderNo: 'BBBBBB',
+            invoiceTaxTotal: 1,
+            invoiceSubTotal: 1,
             invoiceTotal: 1,
-            invoiceDueDate: currentDate.format(DATE_TIME_FORMAT),
+            invoiceDate: currentDate.format(DATE_FORMAT),
+            invoiceDueDate: currentDate.format(DATE_FORMAT),
             status: 'BBBBBB'
           },
           elemDefault
         );
         const expected = Object.assign(
           {
+            invoiceDate: currentDate,
             invoiceDueDate: currentDate
           },
           returnedFromService

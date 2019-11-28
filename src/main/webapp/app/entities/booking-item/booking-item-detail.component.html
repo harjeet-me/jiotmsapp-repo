@@ -58,22 +58,10 @@
                 <dd>
                     <span>{{bookingItem.recievedBy}}</span>
                 </dd>
-                <dt><span jhiTranslate="jiotmsappApp.bookingItem.equipment">Equipment</span></dt>
-                <dd>
-                    <div *ngIf="bookingItem.equipment">
-                        <a [routerLink]="['/equipment', bookingItem.equipment?.id, 'view']">{{bookingItem.equipment?.number}}</a>
-                    </div>
-                </dd>
-                <dt><span jhiTranslate="jiotmsappApp.bookingItem.driver">Driver</span></dt>
-                <dd>
-                    <div *ngIf="bookingItem.driver">
-                        <a [routerLink]="['/driver', bookingItem.driver?.id, 'view']">{{bookingItem.driver?.firstName}}</a>
-                    </div>
-                </dd>
                 <dt><span jhiTranslate="jiotmsappApp.bookingItem.mainBooking">Main Booking</span></dt>
                 <dd>
                     <div *ngIf="bookingItem.mainBooking">
-                        <a [routerLink]="['/booking', bookingItem.mainBooking?.id, 'view']">{{bookingItem.mainBooking?.name}}</a>
+                        <a [routerLink]="['/load-order', bookingItem.mainBooking?.id, 'view']">{{bookingItem.mainBooking?.name}}</a>
                     </div>
                 </dd>
             </dl>

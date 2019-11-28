@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IDriver } from 'app/shared/model/driver.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { DriverService } from './driver.service';
+import { DriverDeleteDialogComponent } from './driver-delete-dialog.component';
 
 @Component({
   selector: 'jhi-driver',
@@ -16,15 +15,14 @@ import { DriverService } from './driver.service';
 })
 export class DriverComponent implements OnInit, OnDestroy {
   drivers: IDriver[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected driverService: DriverService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class DriverComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<IDriver[]>) => res.ok),
-          map((res: HttpResponse<IDriver[]>) => res.body)
-        )
-        .subscribe((res: IDriver[]) => (this.drivers = res));
+        .subscribe((res: HttpResponse<IDriver[]>) => (this.drivers = res.body));
       return;
     }
-    this.driverService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IDriver[]>) => res.ok),
-        map((res: HttpResponse<IDriver[]>) => res.body)
-      )
-      .subscribe((res: IDriver[]) => {
-        this.drivers = res;
-        this.currentSearch = '';
-      });
+    this.driverService.query().subscribe((res: HttpResponse<IDriver[]>) => {
+      this.drivers = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class DriverComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInDrivers();
   }
 
@@ -87,6 +72,11 @@ export class DriverComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInDrivers() {
-    this.eventSubscriber = this.eventManager.subscribe('driverListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('driverListModification', () => this.loadAll());
+  }
+
+  delete(driver: IDriver) {
+    const modalRef = this.modalService.open(DriverDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.driver = driver;
   }
 }

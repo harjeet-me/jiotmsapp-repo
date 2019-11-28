@@ -5,20 +5,12 @@ import { JiotmsappSharedModule } from 'app/shared/shared.module';
 import { InvoiceItemComponent } from './invoice-item.component';
 import { InvoiceItemDetailComponent } from './invoice-item-detail.component';
 import { InvoiceItemUpdateComponent } from './invoice-item-update.component';
-import { InvoiceItemDeletePopupComponent, InvoiceItemDeleteDialogComponent } from './invoice-item-delete-dialog.component';
-import { invoiceItemRoute, invoiceItemPopupRoute } from './invoice-item.route';
-
-const ENTITY_STATES = [...invoiceItemRoute, ...invoiceItemPopupRoute];
+import { InvoiceItemDeleteDialogComponent } from './invoice-item-delete-dialog.component';
+import { invoiceItemRoute } from './invoice-item.route';
 
 @NgModule({
-  imports: [JiotmsappSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    InvoiceItemComponent,
-    InvoiceItemDetailComponent,
-    InvoiceItemUpdateComponent,
-    InvoiceItemDeleteDialogComponent,
-    InvoiceItemDeletePopupComponent
-  ],
+  imports: [JiotmsappSharedModule, RouterModule.forChild(invoiceItemRoute)],
+  declarations: [InvoiceItemComponent, InvoiceItemDetailComponent, InvoiceItemUpdateComponent, InvoiceItemDeleteDialogComponent],
   entryComponents: [InvoiceItemDeleteDialogComponent]
 })
 export class JiotmsappInvoiceItemModule {}

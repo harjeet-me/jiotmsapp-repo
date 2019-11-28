@@ -8,23 +8,11 @@
     -->
     <changeSet id="20191106081951-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="equipment_id"
-                                 baseTableName="booking_item"
-                                 constraintName="fk_booking_item_equipment_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="equipment"/>
-
-        <addForeignKeyConstraint baseColumnNames="driver_id"
-                                 baseTableName="booking_item"
-                                 constraintName="fk_booking_item_driver_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="driver"/>
-
         <addForeignKeyConstraint baseColumnNames="main_booking_id"
                                  baseTableName="booking_item"
                                  constraintName="fk_booking_item_main_booking_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="booking"/>
+                                 referencedTableName="load_order"/>
 
     </changeSet>
 </databaseChangeLog>

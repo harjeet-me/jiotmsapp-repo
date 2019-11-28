@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ICountry } from 'app/shared/model/country.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { CountryService } from './country.service';
+import { CountryDeleteDialogComponent } from './country-delete-dialog.component';
 
 @Component({
   selector: 'jhi-country',
@@ -16,15 +15,14 @@ import { CountryService } from './country.service';
 })
 export class CountryComponent implements OnInit, OnDestroy {
   countries: ICountry[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected countryService: CountryService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class CountryComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<ICountry[]>) => res.ok),
-          map((res: HttpResponse<ICountry[]>) => res.body)
-        )
-        .subscribe((res: ICountry[]) => (this.countries = res));
+        .subscribe((res: HttpResponse<ICountry[]>) => (this.countries = res.body));
       return;
     }
-    this.countryService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<ICountry[]>) => res.ok),
-        map((res: HttpResponse<ICountry[]>) => res.body)
-      )
-      .subscribe((res: ICountry[]) => {
-        this.countries = res;
-        this.currentSearch = '';
-      });
+    this.countryService.query().subscribe((res: HttpResponse<ICountry[]>) => {
+      this.countries = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class CountryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInCountries();
   }
 
@@ -87,6 +72,11 @@ export class CountryComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInCountries() {
-    this.eventSubscriber = this.eventManager.subscribe('countryListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('countryListModification', () => this.loadAll());
+  }
+
+  delete(country: ICountry) {
+    const modalRef = this.modalService.open(CountryDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.country = country;
   }
 }
