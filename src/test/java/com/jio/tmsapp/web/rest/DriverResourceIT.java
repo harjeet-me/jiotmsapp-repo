@@ -350,19 +350,4 @@ public class DriverResourceIT {
             .andExpect(jsonPath("$.[*].licenceNumber").value(hasItem(DEFAULT_LICENCE_NUMBER.intValue())))
             .andExpect(jsonPath("$.[*].dob").value(hasItem(DEFAULT_DOB.toString())));
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Driver.class);
-        Driver driver1 = new Driver();
-        driver1.setId(1L);
-        Driver driver2 = new Driver();
-        driver2.setId(driver1.getId());
-        assertThat(driver1).isEqualTo(driver2);
-        driver2.setId(2L);
-        assertThat(driver1).isNotEqualTo(driver2);
-        driver1.setId(null);
-        assertThat(driver1).isNotEqualTo(driver2);
-    }
 }

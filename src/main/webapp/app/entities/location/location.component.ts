@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ILocation } from 'app/shared/model/location.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { LocationService } from './location.service';
+import { LocationDeleteDialogComponent } from './location-delete-dialog.component';
 
 @Component({
   selector: 'jhi-location',
@@ -16,15 +15,14 @@ import { LocationService } from './location.service';
 })
 export class LocationComponent implements OnInit, OnDestroy {
   locations: ILocation[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected locationService: LocationService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class LocationComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<ILocation[]>) => res.ok),
-          map((res: HttpResponse<ILocation[]>) => res.body)
-        )
-        .subscribe((res: ILocation[]) => (this.locations = res));
+        .subscribe((res: HttpResponse<ILocation[]>) => (this.locations = res.body));
       return;
     }
-    this.locationService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<ILocation[]>) => res.ok),
-        map((res: HttpResponse<ILocation[]>) => res.body)
-      )
-      .subscribe((res: ILocation[]) => {
-        this.locations = res;
-        this.currentSearch = '';
-      });
+    this.locationService.query().subscribe((res: HttpResponse<ILocation[]>) => {
+      this.locations = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class LocationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInLocations();
   }
 
@@ -87,6 +72,11 @@ export class LocationComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInLocations() {
-    this.eventSubscriber = this.eventManager.subscribe('locationListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('locationListModification', () => this.loadAll());
+  }
+
+  delete(location: ILocation) {
+    const modalRef = this.modalService.open(LocationDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.location = location;
   }
 }

@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IBookingItem } from 'app/shared/model/booking-item.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { BookingItemService } from './booking-item.service';
+import { BookingItemDeleteDialogComponent } from './booking-item-delete-dialog.component';
 
 @Component({
   selector: 'jhi-booking-item',
@@ -16,7 +15,6 @@ import { BookingItemService } from './booking-item.service';
 })
 export class BookingItemComponent implements OnInit, OnDestroy {
   bookingItems: IBookingItem[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
@@ -24,8 +22,8 @@ export class BookingItemComponent implements OnInit, OnDestroy {
     protected bookingItemService: BookingItemService,
     protected dataUtils: JhiDataUtils,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -39,23 +37,13 @@ export class BookingItemComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<IBookingItem[]>) => res.ok),
-          map((res: HttpResponse<IBookingItem[]>) => res.body)
-        )
-        .subscribe((res: IBookingItem[]) => (this.bookingItems = res));
+        .subscribe((res: HttpResponse<IBookingItem[]>) => (this.bookingItems = res.body));
       return;
     }
-    this.bookingItemService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IBookingItem[]>) => res.ok),
-        map((res: HttpResponse<IBookingItem[]>) => res.body)
-      )
-      .subscribe((res: IBookingItem[]) => {
-        this.bookingItems = res;
-        this.currentSearch = '';
-      });
+    this.bookingItemService.query().subscribe((res: HttpResponse<IBookingItem[]>) => {
+      this.bookingItems = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -73,9 +61,6 @@ export class BookingItemComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInBookingItems();
   }
 
@@ -96,6 +81,11 @@ export class BookingItemComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInBookingItems() {
-    this.eventSubscriber = this.eventManager.subscribe('bookingItemListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('bookingItemListModification', () => this.loadAll());
+  }
+
+  delete(bookingItem: IBookingItem) {
+    const modalRef = this.modalService.open(BookingItemDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.bookingItem = bookingItem;
   }
 }

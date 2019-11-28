@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 import { IEquipment } from 'app/shared/model/equipment.model';
 import { IDriver } from 'app/shared/model/driver.model';
-import { IBooking } from 'app/shared/model/booking.model';
+import { ILoadOrder } from 'app/shared/model/load-order.model';
 import { StatusEnum } from 'app/shared/model/enumerations/status-enum.model';
 
 export interface IBookingItem {
@@ -19,9 +19,9 @@ export interface IBookingItem {
   pod?: any;
   hazmat?: boolean;
   recievedBy?: string;
-  equipment?: IEquipment;
-  driver?: IDriver;
-  mainBooking?: IBooking;
+  equipment?: IEquipment[];
+  drivers?: IDriver[];
+  mainBooking?: ILoadOrder;
 }
 
 export class BookingItem implements IBookingItem {
@@ -40,9 +40,9 @@ export class BookingItem implements IBookingItem {
     public pod?: any,
     public hazmat?: boolean,
     public recievedBy?: string,
-    public equipment?: IEquipment,
-    public driver?: IDriver,
-    public mainBooking?: IBooking
+    public equipment?: IEquipment[],
+    public drivers?: IDriver[],
+    public mainBooking?: ILoadOrder
   ) {
     this.hazmat = this.hazmat || false;
   }

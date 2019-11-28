@@ -17,8 +17,11 @@
       "detail": {
         "title": "Invoice"
       },
-      "bookingNo": "Booking No",
+      "orderNo": "Order No",
+      "invoiceTaxTotal": "Invoice Tax Total",
+      "invoiceSubTotal": "Invoice Sub Total",
       "invoiceTotal": "Invoice Total",
+      "invoiceDate": "Invoice Date",
       "invoiceDueDate": "Invoice Due Date",
       "status": "Status",
       "invoiceTo": "Invoice To"

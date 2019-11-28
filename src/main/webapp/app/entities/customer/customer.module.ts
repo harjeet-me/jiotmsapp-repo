@@ -5,20 +5,12 @@ import { JiotmsappSharedModule } from 'app/shared/shared.module';
 import { CustomerComponent } from './customer.component';
 import { CustomerDetailComponent } from './customer-detail.component';
 import { CustomerUpdateComponent } from './customer-update.component';
-import { CustomerDeletePopupComponent, CustomerDeleteDialogComponent } from './customer-delete-dialog.component';
-import { customerRoute, customerPopupRoute } from './customer.route';
-
-const ENTITY_STATES = [...customerRoute, ...customerPopupRoute];
+import { CustomerDeleteDialogComponent } from './customer-delete-dialog.component';
+import { customerRoute } from './customer.route';
 
 @NgModule({
-  imports: [JiotmsappSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    CustomerComponent,
-    CustomerDetailComponent,
-    CustomerUpdateComponent,
-    CustomerDeleteDialogComponent,
-    CustomerDeletePopupComponent
-  ],
+  imports: [JiotmsappSharedModule, RouterModule.forChild(customerRoute)],
+  declarations: [CustomerComponent, CustomerDetailComponent, CustomerUpdateComponent, CustomerDeleteDialogComponent],
   entryComponents: [CustomerDeleteDialogComponent]
 })
 export class JiotmsappCustomerModule {}

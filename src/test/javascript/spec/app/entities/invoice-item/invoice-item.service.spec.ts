@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { take, map } from 'rxjs/operators';
 import { InvoiceItemService } from 'app/entities/invoice-item/invoice-item.service';
 import { IInvoiceItem, InvoiceItem } from 'app/shared/model/invoice-item.model';
-import { StatusEnum } from 'app/shared/model/enumerations/status-enum.model';
+import { InvoiceStatus } from 'app/shared/model/enumerations/invoice-status.model';
 
 describe('Service Tests', () => {
   describe('InvoiceItem Service', () => {
@@ -21,7 +21,7 @@ describe('Service Tests', () => {
       service = injector.get(InvoiceItemService);
       httpMock = injector.get(HttpTestingController);
 
-      elemDefault = new InvoiceItem(0, 'AAAAAAA', StatusEnum.PICKEDUP, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new InvoiceItem(0, 'AAAAAAA', 0, 0, 0, InvoiceStatus.DRAFT, 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -57,7 +57,10 @@ describe('Service Tests', () => {
       it('should update a InvoiceItem', () => {
         const returnedFromService = Object.assign(
           {
-            name: 'BBBBBB',
+            description: 'BBBBBB',
+            qty: 1,
+            price: 1,
+            total: 1,
             status: 'BBBBBB',
             shipmentNumber: 'BBBBBB',
             bol: 'BBBBBB'
@@ -78,7 +81,10 @@ describe('Service Tests', () => {
       it('should return a list of InvoiceItem', () => {
         const returnedFromService = Object.assign(
           {
-            name: 'BBBBBB',
+            description: 'BBBBBB',
+            qty: 1,
+            price: 1,
+            total: 1,
             status: 'BBBBBB',
             shipmentNumber: 'BBBBBB',
             bol: 'BBBBBB'

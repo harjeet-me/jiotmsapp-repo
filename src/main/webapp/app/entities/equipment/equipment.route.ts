@@ -1,28 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Equipment } from 'app/shared/model/equipment.model';
 import { EquipmentService } from './equipment.service';
 import { EquipmentComponent } from './equipment.component';
 import { EquipmentDetailComponent } from './equipment-detail.component';
 import { EquipmentUpdateComponent } from './equipment-update.component';
-import { EquipmentDeletePopupComponent } from './equipment-delete-dialog.component';
 import { IEquipment } from 'app/shared/model/equipment.model';
 
 @Injectable({ providedIn: 'root' })
 export class EquipmentResolve implements Resolve<IEquipment> {
   constructor(private service: EquipmentService) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IEquipment> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IEquipment> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(
-        filter((response: HttpResponse<Equipment>) => response.ok),
-        map((equipment: HttpResponse<Equipment>) => equipment.body)
-      );
+      return this.service.find(id).pipe(map((equipment: HttpResponse<Equipment>) => equipment.body));
     }
     return of(new Equipment());
   }
@@ -73,21 +69,5 @@ export const equipmentRoute: Routes = [
       pageTitle: 'jiotmsappApp.equipment.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const equipmentPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: EquipmentDeletePopupComponent,
-    resolve: {
-      equipment: EquipmentResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'jiotmsappApp.equipment.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

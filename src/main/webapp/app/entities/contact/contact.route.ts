@@ -1,28 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Contact } from 'app/shared/model/contact.model';
 import { ContactService } from './contact.service';
 import { ContactComponent } from './contact.component';
 import { ContactDetailComponent } from './contact-detail.component';
 import { ContactUpdateComponent } from './contact-update.component';
-import { ContactDeletePopupComponent } from './contact-delete-dialog.component';
 import { IContact } from 'app/shared/model/contact.model';
 
 @Injectable({ providedIn: 'root' })
 export class ContactResolve implements Resolve<IContact> {
   constructor(private service: ContactService) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IContact> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IContact> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(
-        filter((response: HttpResponse<Contact>) => response.ok),
-        map((contact: HttpResponse<Contact>) => contact.body)
-      );
+      return this.service.find(id).pipe(map((contact: HttpResponse<Contact>) => contact.body));
     }
     return of(new Contact());
   }
@@ -73,21 +69,5 @@ export const contactRoute: Routes = [
       pageTitle: 'jiotmsappApp.contact.home.title'
     },
     canActivate: [UserRouteAccessService]
-  }
-];
-
-export const contactPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: ContactDeletePopupComponent,
-    resolve: {
-      contact: ContactResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'jiotmsappApp.contact.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
   }
 ];

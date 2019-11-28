@@ -32,18 +32,27 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.jio.tmsapp.domain.enumeration.StatusEnum;
+import com.jio.tmsapp.domain.enumeration.InvoiceStatus;
 /**
  * Integration tests for the {@link InvoiceItemResource} REST controller.
  */
 @SpringBootTest(classes = JiotmsappApp.class)
 public class InvoiceItemResourceIT {
 
-    private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final StatusEnum DEFAULT_STATUS = StatusEnum.PICKEDUP;
-    private static final StatusEnum UPDATED_STATUS = StatusEnum.ONROAD;
+    private static final Integer DEFAULT_QTY = 1;
+    private static final Integer UPDATED_QTY = 2;
+
+    private static final Integer DEFAULT_PRICE = 1;
+    private static final Integer UPDATED_PRICE = 2;
+
+    private static final Integer DEFAULT_TOTAL = 1;
+    private static final Integer UPDATED_TOTAL = 2;
+
+    private static final InvoiceStatus DEFAULT_STATUS = InvoiceStatus.DRAFT;
+    private static final InvoiceStatus UPDATED_STATUS = InvoiceStatus.GENERATED;
 
     private static final String DEFAULT_SHIPMENT_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_SHIPMENT_NUMBER = "BBBBBBBBBB";
@@ -104,7 +113,10 @@ public class InvoiceItemResourceIT {
      */
     public static InvoiceItem createEntity(EntityManager em) {
         InvoiceItem invoiceItem = new InvoiceItem()
-            .name(DEFAULT_NAME)
+            .description(DEFAULT_DESCRIPTION)
+            .qty(DEFAULT_QTY)
+            .price(DEFAULT_PRICE)
+            .total(DEFAULT_TOTAL)
             .status(DEFAULT_STATUS)
             .shipmentNumber(DEFAULT_SHIPMENT_NUMBER)
             .bol(DEFAULT_BOL);
@@ -118,7 +130,10 @@ public class InvoiceItemResourceIT {
      */
     public static InvoiceItem createUpdatedEntity(EntityManager em) {
         InvoiceItem invoiceItem = new InvoiceItem()
-            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .qty(UPDATED_QTY)
+            .price(UPDATED_PRICE)
+            .total(UPDATED_TOTAL)
             .status(UPDATED_STATUS)
             .shipmentNumber(UPDATED_SHIPMENT_NUMBER)
             .bol(UPDATED_BOL);
@@ -145,7 +160,10 @@ public class InvoiceItemResourceIT {
         List<InvoiceItem> invoiceItemList = invoiceItemRepository.findAll();
         assertThat(invoiceItemList).hasSize(databaseSizeBeforeCreate + 1);
         InvoiceItem testInvoiceItem = invoiceItemList.get(invoiceItemList.size() - 1);
-        assertThat(testInvoiceItem.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testInvoiceItem.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testInvoiceItem.getQty()).isEqualTo(DEFAULT_QTY);
+        assertThat(testInvoiceItem.getPrice()).isEqualTo(DEFAULT_PRICE);
+        assertThat(testInvoiceItem.getTotal()).isEqualTo(DEFAULT_TOTAL);
         assertThat(testInvoiceItem.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testInvoiceItem.getShipmentNumber()).isEqualTo(DEFAULT_SHIPMENT_NUMBER);
         assertThat(testInvoiceItem.getBol()).isEqualTo(DEFAULT_BOL);
@@ -188,7 +206,10 @@ public class InvoiceItemResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoiceItem.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].qty").value(hasItem(DEFAULT_QTY)))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE)))
+            .andExpect(jsonPath("$.[*].total").value(hasItem(DEFAULT_TOTAL)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].shipmentNumber").value(hasItem(DEFAULT_SHIPMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].bol").value(hasItem(DEFAULT_BOL)));
@@ -205,7 +226,10 @@ public class InvoiceItemResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(invoiceItem.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.qty").value(DEFAULT_QTY))
+            .andExpect(jsonPath("$.price").value(DEFAULT_PRICE))
+            .andExpect(jsonPath("$.total").value(DEFAULT_TOTAL))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
             .andExpect(jsonPath("$.shipmentNumber").value(DEFAULT_SHIPMENT_NUMBER))
             .andExpect(jsonPath("$.bol").value(DEFAULT_BOL));
@@ -234,7 +258,10 @@ public class InvoiceItemResourceIT {
         // Disconnect from session so that the updates on updatedInvoiceItem are not directly saved in db
         em.detach(updatedInvoiceItem);
         updatedInvoiceItem
-            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .qty(UPDATED_QTY)
+            .price(UPDATED_PRICE)
+            .total(UPDATED_TOTAL)
             .status(UPDATED_STATUS)
             .shipmentNumber(UPDATED_SHIPMENT_NUMBER)
             .bol(UPDATED_BOL);
@@ -248,7 +275,10 @@ public class InvoiceItemResourceIT {
         List<InvoiceItem> invoiceItemList = invoiceItemRepository.findAll();
         assertThat(invoiceItemList).hasSize(databaseSizeBeforeUpdate);
         InvoiceItem testInvoiceItem = invoiceItemList.get(invoiceItemList.size() - 1);
-        assertThat(testInvoiceItem.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testInvoiceItem.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testInvoiceItem.getQty()).isEqualTo(UPDATED_QTY);
+        assertThat(testInvoiceItem.getPrice()).isEqualTo(UPDATED_PRICE);
+        assertThat(testInvoiceItem.getTotal()).isEqualTo(UPDATED_TOTAL);
         assertThat(testInvoiceItem.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testInvoiceItem.getShipmentNumber()).isEqualTo(UPDATED_SHIPMENT_NUMBER);
         assertThat(testInvoiceItem.getBol()).isEqualTo(UPDATED_BOL);
@@ -311,24 +341,12 @@ public class InvoiceItemResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoiceItem.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].qty").value(hasItem(DEFAULT_QTY)))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE)))
+            .andExpect(jsonPath("$.[*].total").value(hasItem(DEFAULT_TOTAL)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].shipmentNumber").value(hasItem(DEFAULT_SHIPMENT_NUMBER)))
             .andExpect(jsonPath("$.[*].bol").value(hasItem(DEFAULT_BOL)));
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(InvoiceItem.class);
-        InvoiceItem invoiceItem1 = new InvoiceItem();
-        invoiceItem1.setId(1L);
-        InvoiceItem invoiceItem2 = new InvoiceItem();
-        invoiceItem2.setId(invoiceItem1.getId());
-        assertThat(invoiceItem1).isEqualTo(invoiceItem2);
-        invoiceItem2.setId(2L);
-        assertThat(invoiceItem1).isNotEqualTo(invoiceItem2);
-        invoiceItem1.setId(null);
-        assertThat(invoiceItem1).isNotEqualTo(invoiceItem2);
     }
 }

@@ -1,0 +1,131 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-load-order-heading" jhiTranslate="jiotmsappApp.loadOrder.home.createOrEditLabel">Create or edit a Load Order</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.orderNuber" for="field_orderNuber">Order Nuber</label>
+                    <input type="text" class="form-control" name="orderNuber" id="field_orderNuber"
+                           formControlName="orderNuber"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.description" for="field_description">Description</label>
+                    <input type="text" class="form-control" name="description" id="field_description"
+                           formControlName="description"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.shipmentNumber" for="field_shipmentNumber">Shipment Number</label>
+                    <input type="text" class="form-control" name="shipmentNumber" id="field_shipmentNumber"
+                           formControlName="shipmentNumber"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.bol" for="field_bol">Bol</label>
+                    <input type="text" class="form-control" name="bol" id="field_bol"
+                           formControlName="bol"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.pickup" for="field_pickup">Pickup</label>
+                    <div class="input-group">
+                        <input id="field_pickup" type="text" class="form-control" name="pickup" ngbDatepicker  #pickupDp="ngbDatepicker" formControlName="pickup"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="pickupDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.drop" for="field_drop">Drop</label>
+                    <div class="input-group">
+                        <input id="field_drop" type="text" class="form-control" name="drop" ngbDatepicker  #dropDp="ngbDatepicker" formControlName="drop"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dropDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.pickupLocation" for="field_pickupLocation">Pickup Location</label>
+                    <input type="text" class="form-control" name="pickupLocation" id="field_pickupLocation"
+                           formControlName="pickupLocation"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.dropLocation" for="field_dropLocation">Drop Location</label>
+                    <input type="text" class="form-control" name="dropLocation" id="field_dropLocation"
+                           formControlName="dropLocation"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.currentLocation" for="field_currentLocation">Current Location</label>
+                    <input type="text" class="form-control" name="currentLocation" id="field_currentLocation"
+                           formControlName="currentLocation"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.status" for="field_status">Status</label>
+                    <select class="form-control" name="status" formControlName="status" id="field_status">
+                        <option value="PICKEDUP">{{'jiotmsappApp.StatusEnum.PICKEDUP' | translate}}</option>
+                        <option value="ONROAD">{{'jiotmsappApp.StatusEnum.ONROAD' | translate}}</option>
+                        <option value="DELIVERED">{{'jiotmsappApp.StatusEnum.DELIVERED' | translate}}</option>
+                        <option value="INVOICED">{{'jiotmsappApp.StatusEnum.INVOICED' | translate}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.detention" for="field_detention">Detention</label>
+                    <input type="number" class="form-control" name="detention" id="field_detention"
+                           formControlName="detention"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.chasisInTime" for="field_chasisInTime">Chasis In Time</label>
+                    <div class="d-flex">
+                        <input id="field_chasisInTime" type="datetime-local" class="form-control" name="chasisInTime" formControlName="chasisInTime" placeholder="YYYY-MM-DD HH:mm"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.pod" for="field_pod">Pod</label>
+                    <div>
+                        <img [src]="'data:' + editForm.get('podContentType').value + ';base64,' + editForm.get('pod').value" style="max-height: 100px;" *ngIf="editForm.get('pod').value" alt="loadOrder image"/>
+                        <div *ngIf="editForm.get('pod').value" class="form-text text-danger clearfix">
+                            <span class="pull-left">{{editForm.get('podContentType').value}}, {{byteSize(editForm.get('pod').value)}}</span>
+                            <button type="button" (click)="clearInputImage('pod', 'podContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_pod" (change)="setFileData($event, 'pod', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="pod" id="field_pod"
+                           formControlName="pod"/>
+                    <input type="hidden" class="form-control" name="podContentType" id="field_podContentType"
+                           formControlName="podContentType" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.hazmat" for="field_hazmat">Hazmat</label>
+                    <input type="checkbox" class="form-control" name="hazmat" id="field_hazmat"
+                           formControlName="hazmat"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.recievedBy" for="field_recievedBy">Recieved By</label>
+                    <input type="text" class="form-control" name="recievedBy" id="field_recievedBy"
+                           formControlName="recievedBy"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="jiotmsappApp.loadOrder.customer" for="field_customer">Customer</label>
+                    <select class="form-control" id="field_customer" name="customer" formControlName="customer">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="customerOption.id === editForm.get('customer').value?.id ? editForm.get('customer').value : customerOption" *ngFor="let customerOption of customers; trackBy: trackCustomerById">{{customerOption.email}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

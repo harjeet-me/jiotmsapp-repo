@@ -8,6 +8,8 @@ import javax.persistence.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.jio.tmsapp.domain.enumeration.StatusEnum;
 
@@ -68,17 +70,17 @@ public class BookingItem implements Serializable {
     @Column(name = "recieved_by")
     private String recievedBy;
 
-    @ManyToOne
-    @JsonIgnoreProperties("bookingItems")
-    private Equipment equipment;
+    @OneToMany(mappedBy = "bookingItem")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Equipment> equipment = new HashSet<>();
+
+    @OneToMany(mappedBy = "bookingItem")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Driver> drivers = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties("bookingItems")
-    private Driver driver;
-
-    @ManyToOne
-    @JsonIgnoreProperties("bookingItems")
-    private Booking mainBooking;
+    private LoadOrder mainBooking;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -258,43 +260,67 @@ public class BookingItem implements Serializable {
         this.recievedBy = recievedBy;
     }
 
-    public Equipment getEquipment() {
+    public Set<Equipment> getEquipment() {
         return equipment;
     }
 
-    public BookingItem equipment(Equipment equipment) {
+    public BookingItem equipment(Set<Equipment> equipment) {
         this.equipment = equipment;
         return this;
     }
 
-    public void setEquipment(Equipment equipment) {
-        this.equipment = equipment;
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public BookingItem driver(Driver driver) {
-        this.driver = driver;
+    public BookingItem addEquipment(Equipment equipment) {
+        this.equipment.add(equipment);
+        equipment.setBookingItem(this);
         return this;
     }
 
-    public void setDriver(Driver driver) {
-        this.driver = driver;
+    public BookingItem removeEquipment(Equipment equipment) {
+        this.equipment.remove(equipment);
+        equipment.setBookingItem(null);
+        return this;
     }
 
-    public Booking getMainBooking() {
+    public void setEquipment(Set<Equipment> equipment) {
+        this.equipment = equipment;
+    }
+
+    public Set<Driver> getDrivers() {
+        return drivers;
+    }
+
+    public BookingItem drivers(Set<Driver> drivers) {
+        this.drivers = drivers;
+        return this;
+    }
+
+    public BookingItem addDriver(Driver driver) {
+        this.drivers.add(driver);
+        driver.setBookingItem(this);
+        return this;
+    }
+
+    public BookingItem removeDriver(Driver driver) {
+        this.drivers.remove(driver);
+        driver.setBookingItem(null);
+        return this;
+    }
+
+    public void setDrivers(Set<Driver> drivers) {
+        this.drivers = drivers;
+    }
+
+    public LoadOrder getMainBooking() {
         return mainBooking;
     }
 
-    public BookingItem mainBooking(Booking booking) {
-        this.mainBooking = booking;
+    public BookingItem mainBooking(LoadOrder loadOrder) {
+        this.mainBooking = loadOrder;
         return this;
     }
 
-    public void setMainBooking(Booking booking) {
-        this.mainBooking = booking;
+    public void setMainBooking(LoadOrder loadOrder) {
+        this.mainBooking = loadOrder;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

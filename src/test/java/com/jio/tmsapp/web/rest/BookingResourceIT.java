@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -34,7 +32,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.jio.tmsapp.domain.enumeration.StatusEnum;
 /**
  * Integration tests for the {@link BookingResource} REST controller.
  */
@@ -43,18 +40,6 @@ public class BookingResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_LOAD_NUBER = "AAAAAAAAAA";
-    private static final String UPDATED_LOAD_NUBER = "BBBBBBBBBB";
-
-    private static final String DEFAULT_SHIPMENT_NUMBER = "AAAAAAAAAA";
-    private static final String UPDATED_SHIPMENT_NUMBER = "BBBBBBBBBB";
-
-    private static final String DEFAULT_BOL = "AAAAAAAAAA";
-    private static final String UPDATED_BOL = "BBBBBBBBBB";
-
-    private static final StatusEnum DEFAULT_STATUS = StatusEnum.PICKEDUP;
-    private static final StatusEnum UPDATED_STATUS = StatusEnum.ONROAD;
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -109,11 +94,7 @@ public class BookingResourceIT {
      */
     public static Booking createEntity(EntityManager em) {
         Booking booking = new Booking()
-            .name(DEFAULT_NAME)
-            .loadNuber(DEFAULT_LOAD_NUBER)
-            .shipmentNumber(DEFAULT_SHIPMENT_NUMBER)
-            .bol(DEFAULT_BOL)
-            .status(DEFAULT_STATUS);
+            .name(DEFAULT_NAME);
         return booking;
     }
     /**
@@ -124,11 +105,7 @@ public class BookingResourceIT {
      */
     public static Booking createUpdatedEntity(EntityManager em) {
         Booking booking = new Booking()
-            .name(UPDATED_NAME)
-            .loadNuber(UPDATED_LOAD_NUBER)
-            .shipmentNumber(UPDATED_SHIPMENT_NUMBER)
-            .bol(UPDATED_BOL)
-            .status(UPDATED_STATUS);
+            .name(UPDATED_NAME);
         return booking;
     }
 
@@ -153,10 +130,6 @@ public class BookingResourceIT {
         assertThat(bookingList).hasSize(databaseSizeBeforeCreate + 1);
         Booking testBooking = bookingList.get(bookingList.size() - 1);
         assertThat(testBooking.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testBooking.getLoadNuber()).isEqualTo(DEFAULT_LOAD_NUBER);
-        assertThat(testBooking.getShipmentNumber()).isEqualTo(DEFAULT_SHIPMENT_NUMBER);
-        assertThat(testBooking.getBol()).isEqualTo(DEFAULT_BOL);
-        assertThat(testBooking.getStatus()).isEqualTo(DEFAULT_STATUS);
 
         // Validate the Booking in Elasticsearch
         verify(mockBookingSearchRepository, times(1)).save(testBooking);
@@ -196,11 +169,7 @@ public class BookingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(booking.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].loadNuber").value(hasItem(DEFAULT_LOAD_NUBER)))
-            .andExpect(jsonPath("$.[*].shipmentNumber").value(hasItem(DEFAULT_SHIPMENT_NUMBER)))
-            .andExpect(jsonPath("$.[*].bol").value(hasItem(DEFAULT_BOL)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
     
     @Test
@@ -214,11 +183,7 @@ public class BookingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(booking.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.loadNuber").value(DEFAULT_LOAD_NUBER))
-            .andExpect(jsonPath("$.shipmentNumber").value(DEFAULT_SHIPMENT_NUMBER))
-            .andExpect(jsonPath("$.bol").value(DEFAULT_BOL))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
     }
 
     @Test
@@ -244,11 +209,7 @@ public class BookingResourceIT {
         // Disconnect from session so that the updates on updatedBooking are not directly saved in db
         em.detach(updatedBooking);
         updatedBooking
-            .name(UPDATED_NAME)
-            .loadNuber(UPDATED_LOAD_NUBER)
-            .shipmentNumber(UPDATED_SHIPMENT_NUMBER)
-            .bol(UPDATED_BOL)
-            .status(UPDATED_STATUS);
+            .name(UPDATED_NAME);
 
         restBookingMockMvc.perform(put("/api/bookings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -260,10 +221,6 @@ public class BookingResourceIT {
         assertThat(bookingList).hasSize(databaseSizeBeforeUpdate);
         Booking testBooking = bookingList.get(bookingList.size() - 1);
         assertThat(testBooking.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testBooking.getLoadNuber()).isEqualTo(UPDATED_LOAD_NUBER);
-        assertThat(testBooking.getShipmentNumber()).isEqualTo(UPDATED_SHIPMENT_NUMBER);
-        assertThat(testBooking.getBol()).isEqualTo(UPDATED_BOL);
-        assertThat(testBooking.getStatus()).isEqualTo(UPDATED_STATUS);
 
         // Validate the Booking in Elasticsearch
         verify(mockBookingSearchRepository, times(1)).save(testBooking);
@@ -316,32 +273,13 @@ public class BookingResourceIT {
     public void searchBooking() throws Exception {
         // Initialize the database
         bookingService.save(booking);
-        when(mockBookingSearchRepository.search(queryStringQuery("id:" + booking.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(booking), PageRequest.of(0, 1), 1));
+        when(mockBookingSearchRepository.search(queryStringQuery("id:" + booking.getId())))
+            .thenReturn(Collections.singletonList(booking));
         // Search the booking
         restBookingMockMvc.perform(get("/api/_search/bookings?query=id:" + booking.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(booking.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].loadNuber").value(hasItem(DEFAULT_LOAD_NUBER)))
-            .andExpect(jsonPath("$.[*].shipmentNumber").value(hasItem(DEFAULT_SHIPMENT_NUMBER)))
-            .andExpect(jsonPath("$.[*].bol").value(hasItem(DEFAULT_BOL)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Booking.class);
-        Booking booking1 = new Booking();
-        booking1.setId(1L);
-        Booking booking2 = new Booking();
-        booking2.setId(booking1.getId());
-        assertThat(booking1).isEqualTo(booking2);
-        booking2.setId(2L);
-        assertThat(booking1).isNotEqualTo(booking2);
-        booking1.setId(null);
-        assertThat(booking1).isNotEqualTo(booking2);
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
 }

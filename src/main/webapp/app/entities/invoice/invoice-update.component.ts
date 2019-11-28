@@ -5,9 +5,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
-import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
 import { IInvoice, Invoice } from 'app/shared/model/invoice.model';
 import { InvoiceService } from './invoice.service';
@@ -22,11 +20,16 @@ export class InvoiceUpdateComponent implements OnInit {
   isSaving: boolean;
 
   customers: ICustomer[];
+  invoiceDateDp: any;
+  invoiceDueDateDp: any;
 
   editForm = this.fb.group({
     id: [],
-    bookingNo: [],
+    orderNo: [],
+    invoiceTaxTotal: [],
+    invoiceSubTotal: [],
     invoiceTotal: [],
+    invoiceDate: [],
     invoiceDueDate: [],
     status: [],
     invoiceTo: []
@@ -47,19 +50,18 @@ export class InvoiceUpdateComponent implements OnInit {
     });
     this.customerService
       .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<ICustomer[]>) => mayBeOk.ok),
-        map((response: HttpResponse<ICustomer[]>) => response.body)
-      )
-      .subscribe((res: ICustomer[]) => (this.customers = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe((res: HttpResponse<ICustomer[]>) => (this.customers = res.body), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(invoice: IInvoice) {
     this.editForm.patchValue({
       id: invoice.id,
-      bookingNo: invoice.bookingNo,
+      orderNo: invoice.orderNo,
+      invoiceTaxTotal: invoice.invoiceTaxTotal,
+      invoiceSubTotal: invoice.invoiceSubTotal,
       invoiceTotal: invoice.invoiceTotal,
-      invoiceDueDate: invoice.invoiceDueDate != null ? invoice.invoiceDueDate.format(DATE_TIME_FORMAT) : null,
+      invoiceDate: invoice.invoiceDate,
+      invoiceDueDate: invoice.invoiceDueDate,
       status: invoice.status,
       invoiceTo: invoice.invoiceTo
     });
@@ -83,12 +85,12 @@ export class InvoiceUpdateComponent implements OnInit {
     return {
       ...new Invoice(),
       id: this.editForm.get(['id']).value,
-      bookingNo: this.editForm.get(['bookingNo']).value,
+      orderNo: this.editForm.get(['orderNo']).value,
+      invoiceTaxTotal: this.editForm.get(['invoiceTaxTotal']).value,
+      invoiceSubTotal: this.editForm.get(['invoiceSubTotal']).value,
       invoiceTotal: this.editForm.get(['invoiceTotal']).value,
-      invoiceDueDate:
-        this.editForm.get(['invoiceDueDate']).value != null
-          ? moment(this.editForm.get(['invoiceDueDate']).value, DATE_TIME_FORMAT)
-          : undefined,
+      invoiceDate: this.editForm.get(['invoiceDate']).value,
+      invoiceDueDate: this.editForm.get(['invoiceDueDate']).value,
       status: this.editForm.get(['status']).value,
       invoiceTo: this.editForm.get(['invoiceTo']).value
     };

@@ -2,9 +2,7 @@ package com.jio.tmsapp.service;
 
 import com.jio.tmsapp.domain.Booking;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,10 +21,9 @@ public interface BookingService {
     /**
      * Get all the bookings.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<Booking> findAll(Pageable pageable);
+    List<Booking> findAll();
 
 
     /**
@@ -49,8 +46,7 @@ public interface BookingService {
      *
      * @param query the query of the search.
      * 
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<Booking> search(String query, Pageable pageable);
+    List<Booking> search(String query);
 }

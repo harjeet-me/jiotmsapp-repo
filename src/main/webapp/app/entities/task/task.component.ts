@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ITask } from 'app/shared/model/task.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { TaskService } from './task.service';
+import { TaskDeleteDialogComponent } from './task-delete-dialog.component';
 
 @Component({
   selector: 'jhi-task',
@@ -16,15 +15,14 @@ import { TaskService } from './task.service';
 })
 export class TaskComponent implements OnInit, OnDestroy {
   tasks: ITask[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected taskService: TaskService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class TaskComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<ITask[]>) => res.ok),
-          map((res: HttpResponse<ITask[]>) => res.body)
-        )
-        .subscribe((res: ITask[]) => (this.tasks = res));
+        .subscribe((res: HttpResponse<ITask[]>) => (this.tasks = res.body));
       return;
     }
-    this.taskService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<ITask[]>) => res.ok),
-        map((res: HttpResponse<ITask[]>) => res.body)
-      )
-      .subscribe((res: ITask[]) => {
-        this.tasks = res;
-        this.currentSearch = '';
-      });
+    this.taskService.query().subscribe((res: HttpResponse<ITask[]>) => {
+      this.tasks = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInTasks();
   }
 
@@ -87,6 +72,11 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInTasks() {
-    this.eventSubscriber = this.eventManager.subscribe('taskListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('taskListModification', () => this.loadAll());
+  }
+
+  delete(task: ITask) {
+    const modalRef = this.modalService.open(TaskDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.task = task;
   }
 }

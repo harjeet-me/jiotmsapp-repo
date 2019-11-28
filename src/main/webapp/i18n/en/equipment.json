@@ -20,7 +20,8 @@
       "number": "Number",
       "type": "Type",
       "size": "Size",
-      "insurance": "Insurance"
+      "insurance": "Insurance",
+      "bookingItem": "Booking Item"
     }
   }
 }

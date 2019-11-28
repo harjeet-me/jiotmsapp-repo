@@ -41,6 +41,7 @@
             <th scope="col" ><span jhiTranslate="jiotmsappApp.driver.phoneNumber">Phone Number</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.driver.licenceNumber">Licence Number</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.driver.dob">Dob</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.driver.bookingItem">Booking Item</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
@@ -54,6 +55,11 @@
                 <td>{{driver.phoneNumber}}</td>
                 <td>{{driver.licenceNumber}}</td>
                 <td>{{driver.dob | date:'mediumDate'}}</td>
+                <td>
+                    <div *ngIf="driver.bookingItem">
+                        <a [routerLink]="['/booking-item', driver.bookingItem?.id, 'view' ]" >{{driver.bookingItem?.description}}</a>
+                    </div>
+                </td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"
@@ -68,10 +74,7 @@
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/driver', { outlets: { popup: driver.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                        <button type="submit" (click)="delete(driver)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

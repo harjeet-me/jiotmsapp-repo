@@ -10,7 +10,7 @@ export interface IDriver {
   phoneNumber?: number;
   licenceNumber?: number;
   dob?: Moment;
-  bookingItems?: IBookingItem[];
+  bookingItem?: IBookingItem;
 }
 
 export class Driver implements IDriver {
@@ -23,6 +23,6 @@ export class Driver implements IDriver {
     public phoneNumber?: number,
     public licenceNumber?: number,
     public dob?: Moment,
-    public bookingItems?: IBookingItem[]
+    public bookingItem?: IBookingItem
   ) {}
 }

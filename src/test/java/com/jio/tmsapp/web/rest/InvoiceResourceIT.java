@@ -21,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,24 +34,33 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.jio.tmsapp.domain.enumeration.StatusEnum;
+import com.jio.tmsapp.domain.enumeration.InvoiceStatus;
 /**
  * Integration tests for the {@link InvoiceResource} REST controller.
  */
 @SpringBootTest(classes = JiotmsappApp.class)
 public class InvoiceResourceIT {
 
-    private static final String DEFAULT_BOOKING_NO = "AAAAAAAAAA";
-    private static final String UPDATED_BOOKING_NO = "BBBBBBBBBB";
+    private static final String DEFAULT_ORDER_NO = "AAAAAAAAAA";
+    private static final String UPDATED_ORDER_NO = "BBBBBBBBBB";
+
+    private static final Double DEFAULT_INVOICE_TAX_TOTAL = 1D;
+    private static final Double UPDATED_INVOICE_TAX_TOTAL = 2D;
+
+    private static final Double DEFAULT_INVOICE_SUB_TOTAL = 1D;
+    private static final Double UPDATED_INVOICE_SUB_TOTAL = 2D;
 
     private static final Double DEFAULT_INVOICE_TOTAL = 1D;
     private static final Double UPDATED_INVOICE_TOTAL = 2D;
 
-    private static final Instant DEFAULT_INVOICE_DUE_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_INVOICE_DUE_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalDate DEFAULT_INVOICE_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_INVOICE_DATE = LocalDate.now(ZoneId.systemDefault());
 
-    private static final StatusEnum DEFAULT_STATUS = StatusEnum.PICKEDUP;
-    private static final StatusEnum UPDATED_STATUS = StatusEnum.ONROAD;
+    private static final LocalDate DEFAULT_INVOICE_DUE_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_INVOICE_DUE_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final InvoiceStatus DEFAULT_STATUS = InvoiceStatus.DRAFT;
+    private static final InvoiceStatus UPDATED_STATUS = InvoiceStatus.GENERATED;
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -106,8 +115,11 @@ public class InvoiceResourceIT {
      */
     public static Invoice createEntity(EntityManager em) {
         Invoice invoice = new Invoice()
-            .bookingNo(DEFAULT_BOOKING_NO)
+            .orderNo(DEFAULT_ORDER_NO)
+            .invoiceTaxTotal(DEFAULT_INVOICE_TAX_TOTAL)
+            .invoiceSubTotal(DEFAULT_INVOICE_SUB_TOTAL)
             .invoiceTotal(DEFAULT_INVOICE_TOTAL)
+            .invoiceDate(DEFAULT_INVOICE_DATE)
             .invoiceDueDate(DEFAULT_INVOICE_DUE_DATE)
             .status(DEFAULT_STATUS);
         return invoice;
@@ -120,8 +132,11 @@ public class InvoiceResourceIT {
      */
     public static Invoice createUpdatedEntity(EntityManager em) {
         Invoice invoice = new Invoice()
-            .bookingNo(UPDATED_BOOKING_NO)
+            .orderNo(UPDATED_ORDER_NO)
+            .invoiceTaxTotal(UPDATED_INVOICE_TAX_TOTAL)
+            .invoiceSubTotal(UPDATED_INVOICE_SUB_TOTAL)
             .invoiceTotal(UPDATED_INVOICE_TOTAL)
+            .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceDueDate(UPDATED_INVOICE_DUE_DATE)
             .status(UPDATED_STATUS);
         return invoice;
@@ -147,8 +162,11 @@ public class InvoiceResourceIT {
         List<Invoice> invoiceList = invoiceRepository.findAll();
         assertThat(invoiceList).hasSize(databaseSizeBeforeCreate + 1);
         Invoice testInvoice = invoiceList.get(invoiceList.size() - 1);
-        assertThat(testInvoice.getBookingNo()).isEqualTo(DEFAULT_BOOKING_NO);
+        assertThat(testInvoice.getOrderNo()).isEqualTo(DEFAULT_ORDER_NO);
+        assertThat(testInvoice.getInvoiceTaxTotal()).isEqualTo(DEFAULT_INVOICE_TAX_TOTAL);
+        assertThat(testInvoice.getInvoiceSubTotal()).isEqualTo(DEFAULT_INVOICE_SUB_TOTAL);
         assertThat(testInvoice.getInvoiceTotal()).isEqualTo(DEFAULT_INVOICE_TOTAL);
+        assertThat(testInvoice.getInvoiceDate()).isEqualTo(DEFAULT_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceDueDate()).isEqualTo(DEFAULT_INVOICE_DUE_DATE);
         assertThat(testInvoice.getStatus()).isEqualTo(DEFAULT_STATUS);
 
@@ -190,8 +208,11 @@ public class InvoiceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
-            .andExpect(jsonPath("$.[*].bookingNo").value(hasItem(DEFAULT_BOOKING_NO)))
+            .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO)))
+            .andExpect(jsonPath("$.[*].invoiceTaxTotal").value(hasItem(DEFAULT_INVOICE_TAX_TOTAL.doubleValue())))
+            .andExpect(jsonPath("$.[*].invoiceSubTotal").value(hasItem(DEFAULT_INVOICE_SUB_TOTAL.doubleValue())))
             .andExpect(jsonPath("$.[*].invoiceTotal").value(hasItem(DEFAULT_INVOICE_TOTAL.doubleValue())))
+            .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceDueDate").value(hasItem(DEFAULT_INVOICE_DUE_DATE.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
@@ -207,8 +228,11 @@ public class InvoiceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(invoice.getId().intValue()))
-            .andExpect(jsonPath("$.bookingNo").value(DEFAULT_BOOKING_NO))
+            .andExpect(jsonPath("$.orderNo").value(DEFAULT_ORDER_NO))
+            .andExpect(jsonPath("$.invoiceTaxTotal").value(DEFAULT_INVOICE_TAX_TOTAL.doubleValue()))
+            .andExpect(jsonPath("$.invoiceSubTotal").value(DEFAULT_INVOICE_SUB_TOTAL.doubleValue()))
             .andExpect(jsonPath("$.invoiceTotal").value(DEFAULT_INVOICE_TOTAL.doubleValue()))
+            .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()))
             .andExpect(jsonPath("$.invoiceDueDate").value(DEFAULT_INVOICE_DUE_DATE.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
@@ -236,8 +260,11 @@ public class InvoiceResourceIT {
         // Disconnect from session so that the updates on updatedInvoice are not directly saved in db
         em.detach(updatedInvoice);
         updatedInvoice
-            .bookingNo(UPDATED_BOOKING_NO)
+            .orderNo(UPDATED_ORDER_NO)
+            .invoiceTaxTotal(UPDATED_INVOICE_TAX_TOTAL)
+            .invoiceSubTotal(UPDATED_INVOICE_SUB_TOTAL)
             .invoiceTotal(UPDATED_INVOICE_TOTAL)
+            .invoiceDate(UPDATED_INVOICE_DATE)
             .invoiceDueDate(UPDATED_INVOICE_DUE_DATE)
             .status(UPDATED_STATUS);
 
@@ -250,8 +277,11 @@ public class InvoiceResourceIT {
         List<Invoice> invoiceList = invoiceRepository.findAll();
         assertThat(invoiceList).hasSize(databaseSizeBeforeUpdate);
         Invoice testInvoice = invoiceList.get(invoiceList.size() - 1);
-        assertThat(testInvoice.getBookingNo()).isEqualTo(UPDATED_BOOKING_NO);
+        assertThat(testInvoice.getOrderNo()).isEqualTo(UPDATED_ORDER_NO);
+        assertThat(testInvoice.getInvoiceTaxTotal()).isEqualTo(UPDATED_INVOICE_TAX_TOTAL);
+        assertThat(testInvoice.getInvoiceSubTotal()).isEqualTo(UPDATED_INVOICE_SUB_TOTAL);
         assertThat(testInvoice.getInvoiceTotal()).isEqualTo(UPDATED_INVOICE_TOTAL);
+        assertThat(testInvoice.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
         assertThat(testInvoice.getInvoiceDueDate()).isEqualTo(UPDATED_INVOICE_DUE_DATE);
         assertThat(testInvoice.getStatus()).isEqualTo(UPDATED_STATUS);
 
@@ -313,24 +343,12 @@ public class InvoiceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(invoice.getId().intValue())))
-            .andExpect(jsonPath("$.[*].bookingNo").value(hasItem(DEFAULT_BOOKING_NO)))
+            .andExpect(jsonPath("$.[*].orderNo").value(hasItem(DEFAULT_ORDER_NO)))
+            .andExpect(jsonPath("$.[*].invoiceTaxTotal").value(hasItem(DEFAULT_INVOICE_TAX_TOTAL.doubleValue())))
+            .andExpect(jsonPath("$.[*].invoiceSubTotal").value(hasItem(DEFAULT_INVOICE_SUB_TOTAL.doubleValue())))
             .andExpect(jsonPath("$.[*].invoiceTotal").value(hasItem(DEFAULT_INVOICE_TOTAL.doubleValue())))
+            .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].invoiceDueDate").value(hasItem(DEFAULT_INVOICE_DUE_DATE.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Invoice.class);
-        Invoice invoice1 = new Invoice();
-        invoice1.setId(1L);
-        Invoice invoice2 = new Invoice();
-        invoice2.setId(invoice1.getId());
-        assertThat(invoice1).isEqualTo(invoice2);
-        invoice2.setId(2L);
-        assertThat(invoice1).isNotEqualTo(invoice2);
-        invoice1.setId(null);
-        assertThat(invoice1).isNotEqualTo(invoice2);
     }
 }

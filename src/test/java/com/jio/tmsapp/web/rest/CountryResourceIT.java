@@ -282,19 +282,4 @@ public class CountryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(country.getId().intValue())))
             .andExpect(jsonPath("$.[*].countryName").value(hasItem(DEFAULT_COUNTRY_NAME)));
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Country.class);
-        Country country1 = new Country();
-        country1.setId(1L);
-        Country country2 = new Country();
-        country2.setId(country1.getId());
-        assertThat(country1).isEqualTo(country2);
-        country2.setId(2L);
-        assertThat(country1).isNotEqualTo(country2);
-        country1.setId(null);
-        assertThat(country1).isNotEqualTo(country2);
-    }
 }

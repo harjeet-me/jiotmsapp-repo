@@ -33,16 +33,16 @@
                 <dd>
                     <span>{{employee.commissionPct}}</span>
                 </dd>
-                <dt><span jhiTranslate="jiotmsappApp.employee.department">Department</span></dt>
-                <dd>
-                    <div *ngIf="employee.department">
-                        <a [routerLink]="['/department', employee.department?.id, 'view']">{{employee.department?.id}}</a>
-                    </div>
-                </dd>
                 <dt><span jhiTranslate="jiotmsappApp.employee.manager">Manager</span></dt>
                 <dd>
                     <div *ngIf="employee.manager">
                         <a [routerLink]="['/employee', employee.manager?.id, 'view']">{{employee.manager?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="jiotmsappApp.employee.department">Department</span></dt>
+                <dd>
+                    <div *ngIf="employee.department">
+                        <a [routerLink]="['/department', employee.department?.id, 'view']">{{employee.department?.id}}</a>
                     </div>
                 </dd>
             </dl>

@@ -21,6 +21,12 @@
                 <dd>
                     <span>{{equipment.insurance}}</span>
                 </dd>
+                <dt><span jhiTranslate="jiotmsappApp.equipment.bookingItem">Booking Item</span></dt>
+                <dd>
+                    <div *ngIf="equipment.bookingItem">
+                        <a [routerLink]="['/booking-item', equipment.bookingItem?.id, 'view']">{{equipment.bookingItem?.id}}</a>
+                    </div>
+                </dd>
             </dl>
 
             <button type="submit"

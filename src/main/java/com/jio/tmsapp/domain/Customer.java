@@ -68,8 +68,8 @@ public class Customer implements Serializable {
     @Column(name = "postal_code")
     private String postalCode;
 
-    @OneToOne(optional = false)    @NotNull
-
+    @OneToOne(optional = false)
+    @NotNull
     @JoinColumn(unique = true)
     private Location billingAddress;
 
@@ -83,7 +83,7 @@ public class Customer implements Serializable {
 
     @OneToMany(mappedBy = "customer")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Booking> bookings = new HashSet<>();
+    private Set<LoadOrder> loadOrders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -302,29 +302,29 @@ public class Customer implements Serializable {
         this.insurance = insurance;
     }
 
-    public Set<Booking> getBookings() {
-        return bookings;
+    public Set<LoadOrder> getLoadOrders() {
+        return loadOrders;
     }
 
-    public Customer bookings(Set<Booking> bookings) {
-        this.bookings = bookings;
+    public Customer loadOrders(Set<LoadOrder> loadOrders) {
+        this.loadOrders = loadOrders;
         return this;
     }
 
-    public Customer addBooking(Booking booking) {
-        this.bookings.add(booking);
-        booking.setCustomer(this);
+    public Customer addLoadOrder(LoadOrder loadOrder) {
+        this.loadOrders.add(loadOrder);
+        loadOrder.setCustomer(this);
         return this;
     }
 
-    public Customer removeBooking(Booking booking) {
-        this.bookings.remove(booking);
-        booking.setCustomer(null);
+    public Customer removeLoadOrder(LoadOrder loadOrder) {
+        this.loadOrders.remove(loadOrder);
+        loadOrder.setCustomer(null);
         return this;
     }
 
-    public void setBookings(Set<Booking> bookings) {
-        this.bookings = bookings;
+    public void setLoadOrders(Set<LoadOrder> loadOrders) {
+        this.loadOrders = loadOrders;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

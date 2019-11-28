@@ -5,7 +5,6 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService } from 'ng-jhipster';
@@ -56,78 +55,51 @@ export class JobHistoryUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ jobHistory }) => {
       this.updateForm(jobHistory);
     });
-    this.jobService
-      .query({ filter: 'jobhistory-is-null' })
-      .pipe(
-        filter((mayBeOk: HttpResponse<IJob[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IJob[]>) => response.body)
-      )
-      .subscribe(
-        (res: IJob[]) => {
-          if (!this.editForm.get('job').value || !this.editForm.get('job').value.id) {
-            this.jobs = res;
-          } else {
-            this.jobService
-              .find(this.editForm.get('job').value.id)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<IJob>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<IJob>) => subResponse.body)
-              )
-              .subscribe((subRes: IJob) => (this.jobs = [subRes].concat(res)), (subRes: HttpErrorResponse) => this.onError(subRes.message));
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
-    this.departmentService
-      .query({ filter: 'jobhistory-is-null' })
-      .pipe(
-        filter((mayBeOk: HttpResponse<IDepartment[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IDepartment[]>) => response.body)
-      )
-      .subscribe(
-        (res: IDepartment[]) => {
-          if (!this.editForm.get('department').value || !this.editForm.get('department').value.id) {
-            this.departments = res;
-          } else {
-            this.departmentService
-              .find(this.editForm.get('department').value.id)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<IDepartment>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<IDepartment>) => subResponse.body)
-              )
-              .subscribe(
-                (subRes: IDepartment) => (this.departments = [subRes].concat(res)),
-                (subRes: HttpErrorResponse) => this.onError(subRes.message)
-              );
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
-    this.employeeService
-      .query({ filter: 'jobhistory-is-null' })
-      .pipe(
-        filter((mayBeOk: HttpResponse<IEmployee[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IEmployee[]>) => response.body)
-      )
-      .subscribe(
-        (res: IEmployee[]) => {
-          if (!this.editForm.get('employee').value || !this.editForm.get('employee').value.id) {
-            this.employees = res;
-          } else {
-            this.employeeService
-              .find(this.editForm.get('employee').value.id)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<IEmployee>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<IEmployee>) => subResponse.body)
-              )
-              .subscribe(
-                (subRes: IEmployee) => (this.employees = [subRes].concat(res)),
-                (subRes: HttpErrorResponse) => this.onError(subRes.message)
-              );
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+    this.jobService.query({ filter: 'jobhistory-is-null' }).subscribe(
+      (res: HttpResponse<IJob[]>) => {
+        if (!this.editForm.get('job').value || !this.editForm.get('job').value.id) {
+          this.jobs = res.body;
+        } else {
+          this.jobService
+            .find(this.editForm.get('job').value.id)
+            .subscribe(
+              (subRes: HttpResponse<IJob>) => (this.jobs = [subRes.body].concat(res.body)),
+              (subRes: HttpErrorResponse) => this.onError(subRes.message)
+            );
+        }
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+    this.departmentService.query({ filter: 'jobhistory-is-null' }).subscribe(
+      (res: HttpResponse<IDepartment[]>) => {
+        if (!this.editForm.get('department').value || !this.editForm.get('department').value.id) {
+          this.departments = res.body;
+        } else {
+          this.departmentService
+            .find(this.editForm.get('department').value.id)
+            .subscribe(
+              (subRes: HttpResponse<IDepartment>) => (this.departments = [subRes.body].concat(res.body)),
+              (subRes: HttpErrorResponse) => this.onError(subRes.message)
+            );
+        }
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+    this.employeeService.query({ filter: 'jobhistory-is-null' }).subscribe(
+      (res: HttpResponse<IEmployee[]>) => {
+        if (!this.editForm.get('employee').value || !this.editForm.get('employee').value.id) {
+          this.employees = res.body;
+        } else {
+          this.employeeService
+            .find(this.editForm.get('employee').value.id)
+            .subscribe(
+              (subRes: HttpResponse<IEmployee>) => (this.employees = [subRes.body].concat(res.body)),
+              (subRes: HttpErrorResponse) => this.onError(subRes.message)
+            );
+        }
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
   }
 
   updateForm(jobHistory: IJobHistory) {

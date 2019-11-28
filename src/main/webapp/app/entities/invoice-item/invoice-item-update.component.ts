@@ -17,7 +17,10 @@ export class InvoiceItemUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    name: [],
+    description: [],
+    qty: [],
+    price: [],
+    total: [],
     status: [],
     shipmentNumber: [],
     bol: []
@@ -35,7 +38,10 @@ export class InvoiceItemUpdateComponent implements OnInit {
   updateForm(invoiceItem: IInvoiceItem) {
     this.editForm.patchValue({
       id: invoiceItem.id,
-      name: invoiceItem.name,
+      description: invoiceItem.description,
+      qty: invoiceItem.qty,
+      price: invoiceItem.price,
+      total: invoiceItem.total,
       status: invoiceItem.status,
       shipmentNumber: invoiceItem.shipmentNumber,
       bol: invoiceItem.bol
@@ -60,7 +66,10 @@ export class InvoiceItemUpdateComponent implements OnInit {
     return {
       ...new InvoiceItem(),
       id: this.editForm.get(['id']).value,
-      name: this.editForm.get(['name']).value,
+      description: this.editForm.get(['description']).value,
+      qty: this.editForm.get(['qty']).value,
+      price: this.editForm.get(['price']).value,
+      total: this.editForm.get(['total']).value,
       status: this.editForm.get(['status']).value,
       shipmentNumber: this.editForm.get(['shipmentNumber']).value,
       bol: this.editForm.get(['bol']).value

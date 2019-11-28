@@ -5,14 +5,12 @@ import { JiotmsappSharedModule } from 'app/shared/shared.module';
 import { RegionComponent } from './region.component';
 import { RegionDetailComponent } from './region-detail.component';
 import { RegionUpdateComponent } from './region-update.component';
-import { RegionDeletePopupComponent, RegionDeleteDialogComponent } from './region-delete-dialog.component';
-import { regionRoute, regionPopupRoute } from './region.route';
-
-const ENTITY_STATES = [...regionRoute, ...regionPopupRoute];
+import { RegionDeleteDialogComponent } from './region-delete-dialog.component';
+import { regionRoute } from './region.route';
 
 @NgModule({
-  imports: [JiotmsappSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [RegionComponent, RegionDetailComponent, RegionUpdateComponent, RegionDeleteDialogComponent, RegionDeletePopupComponent],
+  imports: [JiotmsappSharedModule, RouterModule.forChild(regionRoute)],
+  declarations: [RegionComponent, RegionDetailComponent, RegionUpdateComponent, RegionDeleteDialogComponent],
   entryComponents: [RegionDeleteDialogComponent]
 })
 export class JiotmsappRegionModule {}

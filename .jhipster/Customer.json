@@ -83,9 +83,9 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "booking",
+            "otherEntityName": "loadOrder",
             "otherEntityRelationshipName": "customer",
-            "relationshipName": "booking"
+            "relationshipName": "loadOrder"
         }
     ],
     "changelogDate": "20191106081953",

@@ -14,37 +14,7 @@
                     <input type="text" class="form-control" name="name" id="field_name"
                            formControlName="name"/>
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="jiotmsappApp.booking.loadNuber" for="field_loadNuber">Load Nuber</label>
-                    <input type="text" class="form-control" name="loadNuber" id="field_loadNuber"
-                           formControlName="loadNuber"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="jiotmsappApp.booking.shipmentNumber" for="field_shipmentNumber">Shipment Number</label>
-                    <input type="text" class="form-control" name="shipmentNumber" id="field_shipmentNumber"
-                           formControlName="shipmentNumber"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="jiotmsappApp.booking.bol" for="field_bol">Bol</label>
-                    <input type="text" class="form-control" name="bol" id="field_bol"
-                           formControlName="bol"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="jiotmsappApp.booking.status" for="field_status">Status</label>
-                    <select class="form-control" name="status" formControlName="status" id="field_status">
-                        <option value="PICKEDUP">{{'jiotmsappApp.StatusEnum.PICKEDUP' | translate}}</option>
-                        <option value="ONROAD">{{'jiotmsappApp.StatusEnum.ONROAD' | translate}}</option>
-                        <option value="DELIVERED">{{'jiotmsappApp.StatusEnum.DELIVERED' | translate}}</option>
-                    </select>
-                </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="jiotmsappApp.booking.customer" for="field_customer">Customer</label>
-                    <select class="form-control" id="field_customer" name="customer" formControlName="customer">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="customerOption.id === editForm.get('customer').value?.id ? editForm.get('customer').value : customerOption" *ngFor="let customerOption of customers; trackBy: trackCustomerById">{{customerOption.email}}</option>
-                    </select>
-                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

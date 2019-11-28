@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IInsurance } from 'app/shared/model/insurance.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { InsuranceService } from './insurance.service';
+import { InsuranceDeleteDialogComponent } from './insurance-delete-dialog.component';
 
 @Component({
   selector: 'jhi-insurance',
@@ -16,15 +15,14 @@ import { InsuranceService } from './insurance.service';
 })
 export class InsuranceComponent implements OnInit, OnDestroy {
   insurances: IInsurance[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected insuranceService: InsuranceService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class InsuranceComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<IInsurance[]>) => res.ok),
-          map((res: HttpResponse<IInsurance[]>) => res.body)
-        )
-        .subscribe((res: IInsurance[]) => (this.insurances = res));
+        .subscribe((res: HttpResponse<IInsurance[]>) => (this.insurances = res.body));
       return;
     }
-    this.insuranceService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IInsurance[]>) => res.ok),
-        map((res: HttpResponse<IInsurance[]>) => res.body)
-      )
-      .subscribe((res: IInsurance[]) => {
-        this.insurances = res;
-        this.currentSearch = '';
-      });
+    this.insuranceService.query().subscribe((res: HttpResponse<IInsurance[]>) => {
+      this.insurances = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class InsuranceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInInsurances();
   }
 
@@ -87,6 +72,11 @@ export class InsuranceComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInInsurances() {
-    this.eventSubscriber = this.eventManager.subscribe('insuranceListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('insuranceListModification', () => this.loadAll());
+  }
+
+  delete(insurance: IInsurance) {
+    const modalRef = this.modalService.open(InsuranceDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.insurance = insurance;
   }
 }

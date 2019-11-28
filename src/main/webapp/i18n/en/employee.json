@@ -24,9 +24,9 @@
       "hireDate": "Hire Date",
       "salary": "Salary",
       "commissionPct": "Commission Pct",
-      "department": "Department",
       "job": "Job",
       "manager": "Manager",
+      "department": "Department",
       "help": {
         "firstName": "The firstname attribute."
       }

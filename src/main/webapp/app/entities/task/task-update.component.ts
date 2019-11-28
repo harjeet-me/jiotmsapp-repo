@@ -5,7 +5,6 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { ITask, Task } from 'app/shared/model/task.model';
 import { TaskService } from './task.service';
@@ -42,11 +41,7 @@ export class TaskUpdateComponent implements OnInit {
     });
     this.jobService
       .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IJob[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IJob[]>) => response.body)
-      )
-      .subscribe((res: IJob[]) => (this.jobs = res), (res: HttpErrorResponse) => this.onError(res.message));
+      .subscribe((res: HttpResponse<IJob[]>) => (this.jobs = res.body), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
   updateForm(task: ITask) {

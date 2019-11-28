@@ -9,28 +9,6 @@
                 <dd>
                     <span>{{booking.name}}</span>
                 </dd>
-                <dt><span jhiTranslate="jiotmsappApp.booking.loadNuber">Load Nuber</span></dt>
-                <dd>
-                    <span>{{booking.loadNuber}}</span>
-                </dd>
-                <dt><span jhiTranslate="jiotmsappApp.booking.shipmentNumber">Shipment Number</span></dt>
-                <dd>
-                    <span>{{booking.shipmentNumber}}</span>
-                </dd>
-                <dt><span jhiTranslate="jiotmsappApp.booking.bol">Bol</span></dt>
-                <dd>
-                    <span>{{booking.bol}}</span>
-                </dd>
-                <dt><span jhiTranslate="jiotmsappApp.booking.status">Status</span></dt>
-                <dd>
-                    <span jhiTranslate="{{'jiotmsappApp.StatusEnum.' + booking.status}}">{{booking.status}}</span>
-                </dd>
-                <dt><span jhiTranslate="jiotmsappApp.booking.customer">Customer</span></dt>
-                <dd>
-                    <div *ngIf="booking.customer">
-                        <a [routerLink]="['/customer', booking.customer?.id, 'view']">{{booking.customer?.email}}</a>
-                    </div>
-                </dd>
             </dl>
 
             <button type="submit"

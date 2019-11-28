@@ -33,7 +33,7 @@
       "billingAddress": "Billing Address",
       "contact": "Contact",
       "insurance": "Insurance",
-      "booking": "Booking"
+      "loadOrder": "Load Order"
     }
   }
 }

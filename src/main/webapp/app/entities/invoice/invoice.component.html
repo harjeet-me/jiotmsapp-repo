@@ -34,8 +34,11 @@
             <thead>
             <tr>
             <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
-            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.bookingNo">Booking No</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.orderNo">Order No</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.invoiceTaxTotal">Invoice Tax Total</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.invoiceSubTotal">Invoice Sub Total</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.invoiceTotal">Invoice Total</span></th>
+            <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.invoiceDate">Invoice Date</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.invoiceDueDate">Invoice Due Date</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.status">Status</span></th>
             <th scope="col" ><span jhiTranslate="jiotmsappApp.invoice.invoiceTo">Invoice To</span></th>
@@ -45,10 +48,13 @@
             <tbody>
             <tr *ngFor="let invoice of invoices ;trackBy: trackId">
                 <td><a [routerLink]="['/invoice', invoice.id, 'view' ]">{{invoice.id}}</a></td>
-                <td>{{invoice.bookingNo}}</td>
+                <td>{{invoice.orderNo}}</td>
+                <td>{{invoice.invoiceTaxTotal}}</td>
+                <td>{{invoice.invoiceSubTotal}}</td>
                 <td>{{invoice.invoiceTotal}}</td>
-                <td>{{invoice.invoiceDueDate | date:'medium'}}</td>
-                <td jhiTranslate="{{'jiotmsappApp.StatusEnum.' + invoice.status}}">{{invoice.status}}</td>
+                <td>{{invoice.invoiceDate | date:'mediumDate'}}</td>
+                <td>{{invoice.invoiceDueDate | date:'mediumDate'}}</td>
+                <td jhiTranslate="{{'jiotmsappApp.InvoiceStatus.' + invoice.status}}">{{invoice.status}}</td>
                 <td>
                     <div *ngIf="invoice.invoiceTo">
                         <a [routerLink]="['/customer', invoice.invoiceTo?.id, 'view' ]" >{{invoice.invoiceTo?.id}}</a>
@@ -68,10 +74,7 @@
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/invoice', { outlets: { popup: invoice.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                        <button type="submit" (click)="delete(invoice)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

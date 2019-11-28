@@ -2,21 +2,33 @@
     "name": "Invoice",
     "fields": [
         {
-            "fieldName": "bookingNo",
+            "fieldName": "orderNo",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "invoiceTaxTotal",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "invoiceSubTotal",
+            "fieldType": "Double"
         },
         {
             "fieldName": "invoiceTotal",
             "fieldType": "Double"
         },
         {
+            "fieldName": "invoiceDate",
+            "fieldType": "LocalDate"
+        },
+        {
             "fieldName": "invoiceDueDate",
-            "fieldType": "Instant"
+            "fieldType": "LocalDate"
         },
         {
             "fieldName": "status",
-            "fieldType": "StatusEnum",
-            "fieldValues": "PICKEDUP,ONROAD,DELIVERED"
+            "fieldType": "InvoiceStatus",
+            "fieldValues": "DRAFT,GENERATED,SENT,PAID,OVERDRAFT,VOIDED,PARTIALLY_PAID"
         }
     ],
     "relationships": [

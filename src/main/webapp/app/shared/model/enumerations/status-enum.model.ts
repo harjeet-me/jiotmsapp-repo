@@ -1,5 +1,6 @@
 export const enum StatusEnum {
   PICKEDUP = 'PICKEDUP',
   ONROAD = 'ONROAD',
-  DELIVERED = 'DELIVERED'
+  DELIVERED = 'DELIVERED',
+  INVOICED = 'INVOICED'
 }

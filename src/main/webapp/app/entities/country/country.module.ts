@@ -5,20 +5,12 @@ import { JiotmsappSharedModule } from 'app/shared/shared.module';
 import { CountryComponent } from './country.component';
 import { CountryDetailComponent } from './country-detail.component';
 import { CountryUpdateComponent } from './country-update.component';
-import { CountryDeletePopupComponent, CountryDeleteDialogComponent } from './country-delete-dialog.component';
-import { countryRoute, countryPopupRoute } from './country.route';
-
-const ENTITY_STATES = [...countryRoute, ...countryPopupRoute];
+import { CountryDeleteDialogComponent } from './country-delete-dialog.component';
+import { countryRoute } from './country.route';
 
 @NgModule({
-  imports: [JiotmsappSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    CountryComponent,
-    CountryDetailComponent,
-    CountryUpdateComponent,
-    CountryDeleteDialogComponent,
-    CountryDeletePopupComponent
-  ],
+  imports: [JiotmsappSharedModule, RouterModule.forChild(countryRoute)],
+  declarations: [CountryComponent, CountryDetailComponent, CountryUpdateComponent, CountryDeleteDialogComponent],
   entryComponents: [CountryDeleteDialogComponent]
 })
 export class JiotmsappCountryModule {}

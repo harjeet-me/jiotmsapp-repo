@@ -5,7 +5,6 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 import { JhiAlertService } from 'ng-jhipster';
 import { ICustomer, Customer } from 'app/shared/model/customer.model';
 import { CustomerService } from './customer.service';
@@ -64,81 +63,51 @@ export class CustomerUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ customer }) => {
       this.updateForm(customer);
     });
-    this.locationService
-      .query({ filter: 'customer-is-null' })
-      .pipe(
-        filter((mayBeOk: HttpResponse<ILocation[]>) => mayBeOk.ok),
-        map((response: HttpResponse<ILocation[]>) => response.body)
-      )
-      .subscribe(
-        (res: ILocation[]) => {
-          if (!this.editForm.get('billingAddress').value || !this.editForm.get('billingAddress').value.id) {
-            this.billingaddresses = res;
-          } else {
-            this.locationService
-              .find(this.editForm.get('billingAddress').value.id)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<ILocation>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<ILocation>) => subResponse.body)
-              )
-              .subscribe(
-                (subRes: ILocation) => (this.billingaddresses = [subRes].concat(res)),
-                (subRes: HttpErrorResponse) => this.onError(subRes.message)
-              );
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
-    this.contactService
-      .query({ filter: 'customer-is-null' })
-      .pipe(
-        filter((mayBeOk: HttpResponse<IContact[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IContact[]>) => response.body)
-      )
-      .subscribe(
-        (res: IContact[]) => {
-          if (!this.editForm.get('contact').value || !this.editForm.get('contact').value.id) {
-            this.contacts = res;
-          } else {
-            this.contactService
-              .find(this.editForm.get('contact').value.id)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<IContact>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<IContact>) => subResponse.body)
-              )
-              .subscribe(
-                (subRes: IContact) => (this.contacts = [subRes].concat(res)),
-                (subRes: HttpErrorResponse) => this.onError(subRes.message)
-              );
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
-    this.insuranceService
-      .query({ filter: 'customer-is-null' })
-      .pipe(
-        filter((mayBeOk: HttpResponse<IInsurance[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IInsurance[]>) => response.body)
-      )
-      .subscribe(
-        (res: IInsurance[]) => {
-          if (!this.editForm.get('insurance').value || !this.editForm.get('insurance').value.id) {
-            this.insurances = res;
-          } else {
-            this.insuranceService
-              .find(this.editForm.get('insurance').value.id)
-              .pipe(
-                filter((subResMayBeOk: HttpResponse<IInsurance>) => subResMayBeOk.ok),
-                map((subResponse: HttpResponse<IInsurance>) => subResponse.body)
-              )
-              .subscribe(
-                (subRes: IInsurance) => (this.insurances = [subRes].concat(res)),
-                (subRes: HttpErrorResponse) => this.onError(subRes.message)
-              );
-          }
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+    this.locationService.query({ filter: 'customer-is-null' }).subscribe(
+      (res: HttpResponse<ILocation[]>) => {
+        if (!this.editForm.get('billingAddress').value || !this.editForm.get('billingAddress').value.id) {
+          this.billingaddresses = res.body;
+        } else {
+          this.locationService
+            .find(this.editForm.get('billingAddress').value.id)
+            .subscribe(
+              (subRes: HttpResponse<ILocation>) => (this.billingaddresses = [subRes.body].concat(res.body)),
+              (subRes: HttpErrorResponse) => this.onError(subRes.message)
+            );
+        }
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+    this.contactService.query({ filter: 'customer-is-null' }).subscribe(
+      (res: HttpResponse<IContact[]>) => {
+        if (!this.editForm.get('contact').value || !this.editForm.get('contact').value.id) {
+          this.contacts = res.body;
+        } else {
+          this.contactService
+            .find(this.editForm.get('contact').value.id)
+            .subscribe(
+              (subRes: HttpResponse<IContact>) => (this.contacts = [subRes.body].concat(res.body)),
+              (subRes: HttpErrorResponse) => this.onError(subRes.message)
+            );
+        }
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+    this.insuranceService.query({ filter: 'customer-is-null' }).subscribe(
+      (res: HttpResponse<IInsurance[]>) => {
+        if (!this.editForm.get('insurance').value || !this.editForm.get('insurance').value.id) {
+          this.insurances = res.body;
+        } else {
+          this.insuranceService
+            .find(this.editForm.get('insurance').value.id)
+            .subscribe(
+              (subRes: HttpResponse<IInsurance>) => (this.insurances = [subRes.body].concat(res.body)),
+              (subRes: HttpErrorResponse) => this.onError(subRes.message)
+            );
+        }
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
   }
 
   updateForm(customer: ICustomer) {

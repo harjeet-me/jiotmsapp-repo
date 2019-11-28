@@ -7,12 +7,13 @@ import com.jio.tmsapp.repository.search.BookingSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -51,14 +52,13 @@ public class BookingServiceImpl implements BookingService {
     /**
      * Get all the bookings.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<Booking> findAll(Pageable pageable) {
+    public List<Booking> findAll() {
         log.debug("Request to get all Bookings");
-        return bookingRepository.findAll(pageable);
+        return bookingRepository.findAll();
     }
 
 
@@ -91,12 +91,14 @@ public class BookingServiceImpl implements BookingService {
      * Search for the booking corresponding to the query.
      *
      * @param query the query of the search.
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<Booking> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Bookings for query {}", query);
-        return bookingSearchRepository.search(queryStringQuery(query), pageable);    }
+    public List<Booking> search(String query) {
+        log.debug("Request to search Bookings for query {}", query);
+        return StreamSupport
+            .stream(bookingSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .collect(Collectors.toList());
+    }
 }

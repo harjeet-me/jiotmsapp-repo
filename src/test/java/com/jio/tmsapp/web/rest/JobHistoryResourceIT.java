@@ -309,19 +309,4 @@ public class JobHistoryResourceIT {
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].language").value(hasItem(DEFAULT_LANGUAGE.toString())));
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(JobHistory.class);
-        JobHistory jobHistory1 = new JobHistory();
-        jobHistory1.setId(1L);
-        JobHistory jobHistory2 = new JobHistory();
-        jobHistory2.setId(jobHistory1.getId());
-        assertThat(jobHistory1).isEqualTo(jobHistory2);
-        jobHistory2.setId(2L);
-        assertThat(jobHistory1).isNotEqualTo(jobHistory2);
-        jobHistory1.setId(null);
-        assertThat(jobHistory1).isNotEqualTo(jobHistory2);
-    }
 }

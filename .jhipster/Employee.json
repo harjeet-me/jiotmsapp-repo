@@ -33,12 +33,6 @@
     ],
     "relationships": [
         {
-            "relationshipName": "department",
-            "otherEntityName": "department",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "id"
-        },
-        {
             "relationshipType": "one-to-many",
             "otherEntityName": "job",
             "otherEntityRelationshipName": "employee",
@@ -49,6 +43,14 @@
             "otherEntityName": "employee",
             "otherEntityRelationshipName": "employee",
             "relationshipName": "manager",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "department",
+            "otherEntityRelationshipName": "employee",
+            "javadoc": "Another side of the same relationship",
+            "relationshipName": "department",
             "otherEntityField": "id"
         }
     ],

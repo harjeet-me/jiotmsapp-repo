@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IDepartment } from 'app/shared/model/department.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { DepartmentService } from './department.service';
+import { DepartmentDeleteDialogComponent } from './department-delete-dialog.component';
 
 @Component({
   selector: 'jhi-department',
@@ -16,15 +15,14 @@ import { DepartmentService } from './department.service';
 })
 export class DepartmentComponent implements OnInit, OnDestroy {
   departments: IDepartment[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected departmentService: DepartmentService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class DepartmentComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<IDepartment[]>) => res.ok),
-          map((res: HttpResponse<IDepartment[]>) => res.body)
-        )
-        .subscribe((res: IDepartment[]) => (this.departments = res));
+        .subscribe((res: HttpResponse<IDepartment[]>) => (this.departments = res.body));
       return;
     }
-    this.departmentService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IDepartment[]>) => res.ok),
-        map((res: HttpResponse<IDepartment[]>) => res.body)
-      )
-      .subscribe((res: IDepartment[]) => {
-        this.departments = res;
-        this.currentSearch = '';
-      });
+    this.departmentService.query().subscribe((res: HttpResponse<IDepartment[]>) => {
+      this.departments = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class DepartmentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInDepartments();
   }
 
@@ -87,6 +72,11 @@ export class DepartmentComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInDepartments() {
-    this.eventSubscriber = this.eventManager.subscribe('departmentListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('departmentListModification', () => this.loadAll());
+  }
+
+  delete(department: IDepartment) {
+    const modalRef = this.modalService.open(DepartmentDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.department = department;
   }
 }

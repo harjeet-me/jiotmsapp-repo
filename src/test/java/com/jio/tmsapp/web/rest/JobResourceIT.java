@@ -338,19 +338,4 @@ public class JobResourceIT {
             .andExpect(jsonPath("$.[*].minSalary").value(hasItem(DEFAULT_MIN_SALARY.intValue())))
             .andExpect(jsonPath("$.[*].maxSalary").value(hasItem(DEFAULT_MAX_SALARY.intValue())));
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Job.class);
-        Job job1 = new Job();
-        job1.setId(1L);
-        Job job2 = new Job();
-        job2.setId(job1.getId());
-        assertThat(job1).isEqualTo(job2);
-        job2.setId(2L);
-        assertThat(job1).isNotEqualTo(job2);
-        job1.setId(null);
-        assertThat(job1).isNotEqualTo(job2);
-    }
 }

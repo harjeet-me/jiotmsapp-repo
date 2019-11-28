@@ -359,19 +359,4 @@ public class VendorResourceIT {
             .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.intValue())))
             .andExpect(jsonPath("$.[*].insuranceProvider").value(hasItem(DEFAULT_INSURANCE_PROVIDER)));
     }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Vendor.class);
-        Vendor vendor1 = new Vendor();
-        vendor1.setId(1L);
-        Vendor vendor2 = new Vendor();
-        vendor2.setId(vendor1.getId());
-        assertThat(vendor1).isEqualTo(vendor2);
-        vendor2.setId(2L);
-        assertThat(vendor1).isNotEqualTo(vendor2);
-        vendor1.setId(null);
-        assertThat(vendor1).isNotEqualTo(vendor2);
-    }
 }

@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
-import { IDepartment } from 'app/shared/model/department.model';
 import { IJob } from 'app/shared/model/job.model';
 import { IEmployee } from 'app/shared/model/employee.model';
+import { IDepartment } from 'app/shared/model/department.model';
 
 export interface IEmployee {
   id?: number;
@@ -12,9 +12,9 @@ export interface IEmployee {
   hireDate?: Moment;
   salary?: number;
   commissionPct?: number;
-  department?: IDepartment;
   jobs?: IJob[];
   manager?: IEmployee;
+  department?: IDepartment;
 }
 
 export class Employee implements IEmployee {
@@ -27,8 +27,8 @@ export class Employee implements IEmployee {
     public hireDate?: Moment,
     public salary?: number,
     public commissionPct?: number,
-    public department?: IDepartment,
     public jobs?: IJob[],
-    public manager?: IEmployee
+    public manager?: IEmployee,
+    public department?: IDepartment
   ) {}
 }

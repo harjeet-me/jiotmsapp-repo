@@ -2,13 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { filter, map } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ICustomer } from 'app/shared/model/customer.model';
-import { AccountService } from 'app/core/auth/account.service';
 import { CustomerService } from './customer.service';
+import { CustomerDeleteDialogComponent } from './customer-delete-dialog.component';
 
 @Component({
   selector: 'jhi-customer',
@@ -16,15 +15,14 @@ import { CustomerService } from './customer.service';
 })
 export class CustomerComponent implements OnInit, OnDestroy {
   customers: ICustomer[];
-  currentAccount: any;
   eventSubscriber: Subscription;
   currentSearch: string;
 
   constructor(
     protected customerService: CustomerService,
     protected eventManager: JhiEventManager,
-    protected activatedRoute: ActivatedRoute,
-    protected accountService: AccountService
+    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
       this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search']
@@ -38,23 +36,13 @@ export class CustomerComponent implements OnInit, OnDestroy {
         .search({
           query: this.currentSearch
         })
-        .pipe(
-          filter((res: HttpResponse<ICustomer[]>) => res.ok),
-          map((res: HttpResponse<ICustomer[]>) => res.body)
-        )
-        .subscribe((res: ICustomer[]) => (this.customers = res));
+        .subscribe((res: HttpResponse<ICustomer[]>) => (this.customers = res.body));
       return;
     }
-    this.customerService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<ICustomer[]>) => res.ok),
-        map((res: HttpResponse<ICustomer[]>) => res.body)
-      )
-      .subscribe((res: ICustomer[]) => {
-        this.customers = res;
-        this.currentSearch = '';
-      });
+    this.customerService.query().subscribe((res: HttpResponse<ICustomer[]>) => {
+      this.customers = res.body;
+      this.currentSearch = '';
+    });
   }
 
   search(query) {
@@ -72,9 +60,6 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadAll();
-    this.accountService.identity().subscribe(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInCustomers();
   }
 
@@ -87,6 +72,11 @@ export class CustomerComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInCustomers() {
-    this.eventSubscriber = this.eventManager.subscribe('customerListModification', response => this.loadAll());
+    this.eventSubscriber = this.eventManager.subscribe('customerListModification', () => this.loadAll());
+  }
+
+  delete(customer: ICustomer) {
+    const modalRef = this.modalService.open(CustomerDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.customer = customer;
   }
 }

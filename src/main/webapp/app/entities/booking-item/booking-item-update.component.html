@@ -47,6 +47,7 @@
                         <option value="PICKEDUP">{{'jiotmsappApp.StatusEnum.PICKEDUP' | translate}}</option>
                         <option value="ONROAD">{{'jiotmsappApp.StatusEnum.ONROAD' | translate}}</option>
                         <option value="DELIVERED">{{'jiotmsappApp.StatusEnum.DELIVERED' | translate}}</option>
+                        <option value="INVOICED">{{'jiotmsappApp.StatusEnum.INVOICED' | translate}}</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -89,24 +90,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.equipment" for="field_equipment">Equipment</label>
-                    <select class="form-control" id="field_equipment" name="equipment" formControlName="equipment">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="equipmentOption.id === editForm.get('equipment').value?.id ? editForm.get('equipment').value : equipmentOption" *ngFor="let equipmentOption of equipment; trackBy: trackEquipmentById">{{equipmentOption.number}}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.driver" for="field_driver">Driver</label>
-                    <select class="form-control" id="field_driver" name="driver" formControlName="driver">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="driverOption.id === editForm.get('driver').value?.id ? editForm.get('driver').value : driverOption" *ngFor="let driverOption of drivers; trackBy: trackDriverById">{{driverOption.firstName}}</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="jiotmsappApp.bookingItem.mainBooking" for="field_mainBooking">Main Booking</label>
                     <select class="form-control" id="field_mainBooking" name="mainBooking" formControlName="mainBooking">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="bookingOption.id === editForm.get('mainBooking').value?.id ? editForm.get('mainBooking').value : bookingOption" *ngFor="let bookingOption of bookings; trackBy: trackBookingById">{{bookingOption.name}}</option>
+                        <option [ngValue]="loadOrderOption.id === editForm.get('mainBooking').value?.id ? editForm.get('mainBooking').value : loadOrderOption" *ngFor="let loadOrderOption of loadorders; trackBy: trackLoadOrderById">{{loadOrderOption.name}}</option>
                     </select>
                 </div>
             </div>

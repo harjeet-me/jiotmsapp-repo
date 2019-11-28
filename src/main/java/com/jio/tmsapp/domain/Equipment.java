@@ -1,4 +1,5 @@
 package com.jio.tmsapp.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -40,6 +41,10 @@ public class Equipment implements Serializable {
 
     @Column(name = "insurance")
     private String insurance;
+
+    @ManyToOne
+    @JsonIgnoreProperties("equipment")
+    private BookingItem bookingItem;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -100,6 +105,19 @@ public class Equipment implements Serializable {
 
     public void setInsurance(String insurance) {
         this.insurance = insurance;
+    }
+
+    public BookingItem getBookingItem() {
+        return bookingItem;
+    }
+
+    public Equipment bookingItem(BookingItem bookingItem) {
+        this.bookingItem = bookingItem;
+        return this;
+    }
+
+    public void setBookingItem(BookingItem bookingItem) {
+        this.bookingItem = bookingItem;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
